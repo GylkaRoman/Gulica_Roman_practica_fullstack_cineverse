@@ -1,7 +1,10 @@
-namespace App\Repositories\Interfaces;
+<?php
 
+namespace App\Repositories\Interfaces;
 use App\DTO\MovieDTO;
+
 interface MovieRepositoryInterface
 {
     public function create(MovieDTO $dto);
+    
 }

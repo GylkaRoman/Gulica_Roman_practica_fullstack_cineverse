@@ -7,8 +7,6 @@ use App\Http\Requests\StoreMovieRequest;
 use App\DTO\MovieDTO;
 use App\Services\Interfaces\MovieServiceInterface;
 
-use Illuminate\Http\Request;
-
 class MovieController extends Controller
 {
     public function __construct(

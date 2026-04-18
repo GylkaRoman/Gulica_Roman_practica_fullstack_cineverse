@@ -1,4 +1,6 @@
-namespace App\Repositories\Interfaces;
+<?php
+
+namespace App\Services\Interfaces;
 
 use App\DTO\MovieDTO;
 

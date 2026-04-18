@@ -1,6 +1,9 @@
+<?php
+
 namespace App\DTO;
 
-class MovieDTO {
+class MovieDTO
+{
     public function __construct(
         public string $title,
         public string $original_title,
