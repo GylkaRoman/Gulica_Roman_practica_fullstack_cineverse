@@ -15,4 +15,9 @@ class MovieService implements MovieServiceInterface
     {
         return $this->repository->create($dto);
     }
+
+    public function getAll(int $perPage)
+    {
+        return $this->repository->getAll($perPage);
+    }
 }

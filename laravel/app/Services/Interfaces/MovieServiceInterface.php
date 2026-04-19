@@ -7,4 +7,7 @@ use App\DTO\MovieDTO;
 interface MovieServiceInterface
 {
     public function create(MovieDTO $dto);
+
+    public function getAll(int $perPage);
+
 }
