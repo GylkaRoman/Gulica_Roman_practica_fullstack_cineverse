@@ -3,8 +3,9 @@
 namespace App\Services\Impl;
 use App\DTO\MovieDTO;
 use App\Repositories\Interfaces\MovieRepositoryInterface;
+use App\Services\Interfaces\MovieServiceInterface;
 
-class MovieService implements MovieRepositoryInterface
+class MovieService implements MovieServiceInterface
 {
     public function __construct(
         private MovieRepositoryInterface $repository
