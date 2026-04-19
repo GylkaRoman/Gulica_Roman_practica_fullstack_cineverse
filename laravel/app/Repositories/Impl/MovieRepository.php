@@ -22,4 +22,9 @@ class MovieRepository implements MovieRepositoryInterface
             'actors' => $dto->actors,
         ]);
     }
+
+    public function getAll(int $perPage)
+    {
+        return Movie::latest()->paginate($perPage);
+    }
 }
