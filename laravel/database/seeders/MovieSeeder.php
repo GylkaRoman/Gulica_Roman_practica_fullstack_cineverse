@@ -1,0 +1,136 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Movie;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
+class MovieSeeder extends Seeder
+{
+    public function run(): void
+    {
+        Movie::insert([
+            [
+                'title' => 'Interstellar',
+                'original_title' => 'Interstellar',
+                'description' => 'A science fiction epic about a suffocating Earth, space flights, and time paradoxes.',
+                'poster_url' => 'https://avatars.mds.yandex.net/get-kinopoisk-image/1600647/430042eb-ee69-4818-aed0-a312400a26bf/600x900',
+                'trailer_url' => 'https://youtu.be/zSWdZVtXT7E?si=cvYFxrYrRhPUxolT',
+                'genre' => 'Science fiction',
+                'duration' => 249,
+                'age_rating' => '18+',
+                'director' => 'Christopher Nolan',
+                'actors' => 'Matthew McConaughey, Anne Hathaway, Jessica Chastain, Mackenzie Foy, Michael Caine',
+            ],
+            [
+                'title' => 'The Dark Knight 2008',
+                'original_title' => 'The Dark Knight 2008',
+                'description' => 'Batman has a new enemy: Joker.',
+                'poster_url' => 'https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/0fa5bf50-d5ad-446f-a599-b26d070c8b99/600x900',
+                'trailer_url' => 'https://youtu.be/EXeTwQWrcwY?si=fY9KBudSVrAdRf3G',
+                'genre' => 'Action',
+                'duration' => 232,
+                'age_rating' => '18+',
+                'director' => 'Christopher Nolan',
+                'actors' => 'Christian Bale, Heath Ledger, Aaron Eckhart, Maggie Gyllenhaal, Gary Oldman',
+            ],
+            [
+                'title' => 'Avatar 2008',
+                'original_title' => 'Avatar',
+                'description' => 'Paralyzed Marine Becomes a Pandora Resident',
+                'poster_url' => 'https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/4adf61aa-3cb7-4381-9245-523971e5b4c8/600x900',
+                'trailer_url' => 'https://youtu.be/5PSNL1qE6VY?si=uHxYZWAre6CdvKtM',
+                'genre' => 'Science fiction',
+                'duration' => 242,
+                'age_rating' => '12+',
+                'director' => 'James Cameron',
+                'actors' => 'Sam Worthington, Zoe Saldana, Sigourney Weaver, Stephen Lang, Michelle Rodriguez',
+            ],
+            [
+                'title' => 'Titanic',
+                'original_title' => 'Titanic',
+                'description' => 'Forbidden love against the backdrop of the death of a legendary liner.',
+                'poster_url' => 'https://avatars.mds.yandex.net/get-kinopoisk-image/10592371/7f0e6761-4635-46ad-b804-59d5cf1ae85c/600x900',
+                'trailer_url' => 'https://youtu.be/CHekzSiZjrY?si=lpiNMHLMoPQqf-5v',
+                'genre' => 'Drama',
+                'duration' => 314,
+                'age_rating' => '12+',
+                'director' => 'James Cameron',
+                'actors' => 'Leonardo DiCaprio, Kate Winslet, Billy Zane ,Kathy Bates, Frances Fisher',
+            ],
+            [
+                'title' => 'Gladiator 2000',
+                'original_title' => 'Gladiator',
+                'description' => 'A brave general turned slave takes revenge on the empire.',
+                'poster_url' => 'https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/7c3460dc-344d-433f-8220-f18d86c8397d/600x900',
+                'trailer_url' => 'https://youtu.be/P5ieIbInFpg?si=3Jk-_nNFBQOqqmVf',
+                'genre' => 'Action',
+                'duration' => 235,
+                'age_rating' => '18+',
+                'director' => 'Ridley Scott',
+                'actors' => 'Russell Crowe, Joaquin Phoenix, Connie Nielsen, Oliver Reed, Richard Harris',
+            ],
+            [
+                'title' => 'The Matrix: Revolution 2003',
+                'original_title' => 'The Matrix Revolution',
+                'description' => "It's time for Neo to fulfill the prophecy and fight the Matrix.",
+                'poster_url' => 'https://avatars.mds.yandex.net/get-kinopoisk-image/1900788/37fc55e7-dfc7-406f-a187-17ef49f65b6f/600x900',
+                'trailer_url' => 'https://youtu.be/hMbexEPAOQI?si=ss-ihEGm_7XznU7J',
+                'genre' => 'Science fiction',
+                'duration' => 209,
+                'age_rating' => '18+',
+                'director' => 'Wachowski',
+                'actors' => 'Keanu Reeves, Hugo Weaving, Carrie-Anne Moss, Laurence Fishburne, Harold Perrineau',
+            ],
+            [
+                'title' => 'Forrest Gump',
+                'original_title' => 'Forrest Gump',
+                'description' => 'Half a century of US history through the eyes of an Alabama eccentric.',
+                'poster_url' => 'https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/3560b757-9b95-45ec-af8c-623972370f9d/600x900',
+                'trailer_url' => 'https://youtu.be/bLvqoHBptjg?si=mrawyLOljCNjOYSe',
+                'genre' => 'Drama',
+                'duration' => 222,
+                'age_rating' => '18+',
+                'director' => 'Robert Zemeckis',
+                'actors' => 'Tom Hanks, Robin Wright, Sally Field, Gary Sinise, Mykelti Williamson',
+            ],
+            [
+                'title' => 'The Shawshank Redemption',
+                'original_title' => 'The Shawshank Redemption',
+                'description' => 'A wrongfully convicted banker is plotting a prison escape.',
+                'poster_url' => 'https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/0b76b2a2-d1c7-4f04-a284-80ff7bb709a4/600x900',
+                'trailer_url' => 'https://youtu.be/PLl99DlL6b4?si=uiJEuG3GiMoeWa5y',
+                'genre' => 'Drama',
+                'duration' => 222,
+                'age_rating' => '18+',
+                'director' => 'Frank Darabont',
+                'actors' => 'Tim Robbins, Morgan Freeman, Bob Gunton, William Sadler, Clancy Brown',
+            ],
+            [
+                'title' => 'Joker 2019',
+                'original_title' => 'Joker',
+                'description' => 'How a failed comedian became the most dangerous man in Gotham.',
+                'poster_url' => 'https://avatars.mds.yandex.net/get-kinopoisk-image/1946459/84934543-5991-4c93-97eb-beb6186a3ad7/600x900',
+                'trailer_url' => 'https://youtu.be/t433PEQGErc?si=s_lxlFRBMoNCIY5E',
+                'genre' => 'Drama',
+                'duration' => 202,
+                'age_rating' => '18+',
+                'director' => 'Todd Phillips',
+                'actors' => 'Joaquin Phoenix, Robert De Niro, Zazie Beetz, Frances Conroy, Brett Cullen',
+            ],
+            [
+                'title' => 'Avengers: Endgame',
+                'original_title' => 'Avengers: Endgame',
+                'description' => 'Iron Man, Thor and others try to outsmart Thanos.',
+                'poster_url' => 'https://avatars.mds.yandex.net/get-kinopoisk-image/1600647/ae22f153-9715-41bb-adb4-f648b3e16092/600x900',
+                'trailer_url' => 'https://youtu.be/TcMBFSGVi1c?si=zgt6dd6Sr-fJXygx',
+                'genre' => 'Action',
+                'duration' => 301,
+                'age_rating' => '18+',
+                'director' => 'Russo Brothers',
+                'actors' => 'Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth, Scarlett Johansson',
+            ],
+        ]);
+    }
+}
