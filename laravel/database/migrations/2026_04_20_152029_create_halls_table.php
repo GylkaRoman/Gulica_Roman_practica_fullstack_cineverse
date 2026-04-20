@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('halls', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+
+            $table->integer('rows_count');
+            $table->integer('seats_per_row');
+
             $table->timestamps();
         });
     }
