@@ -6,8 +6,8 @@ class HallDTO
 {
     public function __construct(
         public string $name,
-        public string $rows_count,
-        public string $seats_per_row
+        public int $rows_count,
+        public int $seats_per_row
     ) {}
 
     public static function fromArray(array $data): self
