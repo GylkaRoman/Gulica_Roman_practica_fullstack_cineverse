@@ -25,7 +25,7 @@ class MovieRepository implements MovieRepositoryInterface
 
     public function getAll(int $perPage)
     {
-        return Movie::latest()->paginate($perPage);
+        return Movie::latest()->cursorPaginate($perPage);
     }
 
     public function getById(int $id)
