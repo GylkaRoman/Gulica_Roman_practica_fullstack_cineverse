@@ -6,3 +6,5 @@ use App\Http\Controllers\Api\MovieController;
 Route::post('/movies', [MovieController::class, 'store']);
 
 Route::get('/movies', [MovieController::class, 'index']);
+
+Route::get('/movies/{id}', [MovieController::class, 'show']);
