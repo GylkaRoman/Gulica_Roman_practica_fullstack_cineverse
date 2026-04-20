@@ -9,4 +9,5 @@ interface MovieRepositoryInterface
 
     public function getAll(int $perPage);
 
+    public function getById(int $id);
 }
