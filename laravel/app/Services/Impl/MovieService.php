@@ -20,4 +20,9 @@ class MovieService implements MovieServiceInterface
     {
         return $this->repository->getAll($perPage);
     }
+
+    public function getById(int $id)
+    {
+        return $this->repository->getById($id);
+    }
 }
