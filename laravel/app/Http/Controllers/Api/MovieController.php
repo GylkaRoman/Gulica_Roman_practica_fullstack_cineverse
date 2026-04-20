@@ -24,6 +24,10 @@ class MovieController extends Controller
     {
         $perPage = $request->query('per_page', 10);
         return $this->service->getAll($perPage);
+    }
 
+    public function show(int $id)
+    {
+        return $this->service->getById($id);       
     }
 }
