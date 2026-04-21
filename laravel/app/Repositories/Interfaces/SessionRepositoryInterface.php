@@ -7,5 +7,5 @@ interface SessionRepositoryInterface
 {
     public function create(SessionDTO $dto);
 
-    public function getAll(int $perPage);
+    public function getAll(int $perPage, ?string $date = null);
 }

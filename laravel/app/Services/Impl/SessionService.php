@@ -17,8 +17,8 @@ class SessionService implements SessionServiceInterface
         return $this->repository->create($dto);
     }
 
-    public function getAll(int $perPage)
+    public function getAll(int $perPage, ?string $date = null)
     {
-        return $this->repository->getAll($perPage);
+        return $this->repository->getAll($perPage, $date);
     }
 }

@@ -22,8 +22,18 @@ class SessionRepository implements SessionRepositoryInterface
         ]);
     }
 
-    public function getAll(int $perPage)
+    public function getAll(int $perPage, ?string $date = null)
     {
-        return MovieSession::with(['movie', 'hall'])->latest()->cursorPaginate($perPage);
+        $query = MovieSession::with(['movie', 'hall'])
+        ->latest()
+        ->cursorPaginate($perPage);
+
+        if ($date) {
+            $query = MovieSession::with(['movie', 'hall'])
+            ->whereDate('date', $date)
+            ->latest()
+            ->cursorPaginate($perPage);
+        }
+        return $query;
     }
 }
