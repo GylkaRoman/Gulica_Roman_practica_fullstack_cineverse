@@ -2,6 +2,9 @@
 
 namespace App\DTO;
 
+use App\Enums\SessionFormat;
+use App\Enums\SessionLanguage;
+
 class SessionDTO
 {
     public function __construct(
@@ -9,8 +12,8 @@ class SessionDTO
         public int $hall_id,
         public string $date,
         public string $time,
-        public string $format,
-        public string $language,
+        public SessionFormat $format,
+        public SessionLanguage $language,
         public float $base_price,
     ) {}
 
