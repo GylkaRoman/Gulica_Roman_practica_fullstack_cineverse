@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\SessionFormat;
+use App\Enums\SessionLanguage;
 use Illuminate\Database\Eloquent\Model;
 
 class Session extends Model
@@ -14,6 +16,11 @@ class Session extends Model
         'format',
         'language',
         'base_price',
+    ];
+
+    protected $casts = [
+        'format' => SessionFormat::class,
+        'language' => SessionLanguage::class,
     ];
 
     public function movie() {
