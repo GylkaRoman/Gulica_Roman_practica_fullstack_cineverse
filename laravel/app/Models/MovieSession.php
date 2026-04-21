@@ -6,7 +6,7 @@ use App\Enums\SessionFormat;
 use App\Enums\SessionLanguage;
 use Illuminate\Database\Eloquent\Model;
 
-class Session extends Model
+class MovieSession extends Model
 {
     protected $fillable = [
         'movie_id',

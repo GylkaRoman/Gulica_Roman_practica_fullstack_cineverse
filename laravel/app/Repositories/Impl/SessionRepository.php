@@ -3,6 +3,7 @@
 namespace App\Repositories\Impl;
 
 use App\DTO\SessionDTO;
+use App\Models\MovieSession;
 use App\Models\Session;
 use App\Repositories\Interfaces\SessionRepositoryInterface;
 
@@ -10,7 +11,7 @@ class SessionRepository implements SessionRepositoryInterface
 {
     public function create(SessionDTO $dto)
     {
-        return Session::create([
+        return MovieSession::create([
             'movie_id' => $dto->movie_id,
             'hall_id' => $dto->hall_id,
             'date' => $dto->date,
@@ -23,6 +24,6 @@ class SessionRepository implements SessionRepositoryInterface
 
     public function getAll(int $perPage)
     {
-        return Session::with(['movie', 'hall'])->latest()->cursorPaginate($perPage);
+        return MovieSession::with(['movie', 'hall'])->latest()->cursorPaginate($perPage);
     }
 }

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Hall;
 use App\Models\Movie;
+use App\Models\MovieSession;
 use App\Models\Session;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -26,7 +27,7 @@ class SessionSeeder extends Seeder
         Carbon::now()->addDays(6)->toDateString(),
     ];
 
-    Session::insert([
+    MovieSession::insert([
 
         ['movie_id' => $movies[0], 'hall_id' => $halls[0], 'date' => $dates[0], 'time' => '10:00', 'format' => '2D', 'language' => 'ru', 'base_price' => 100],
         ['movie_id' => $movies[1], 'hall_id' => $halls[1], 'date' => $dates[0], 'time' => '14:00', 'format' => '3D', 'language' => 'en', 'base_price' => 120],
