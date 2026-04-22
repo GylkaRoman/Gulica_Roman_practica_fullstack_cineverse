@@ -12,8 +12,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('hall_id')->constrained()->cascadeOnDelete();
 
-            $table->integer('row');
-            $table->integer('number');
+            $table->integer('row_number');
+            $table->integer('seat_number');
 
             $table->enum('type', ['standart', 'vip'])->default('standart');
 
