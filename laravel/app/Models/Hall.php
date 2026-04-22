@@ -11,4 +11,9 @@ class Hall extends Model
         'rows_count',
         'seats_per_row',
     ];
+
+    public function seats() 
+    {
+        return $this->hasMany(Seat::class);
+    }
 }
