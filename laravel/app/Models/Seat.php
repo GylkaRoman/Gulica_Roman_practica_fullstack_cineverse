@@ -16,4 +16,8 @@ class Seat extends Model
     public function hall() {
         return $this->belongsTo(Hall::class);
     }
+
+    public function bookings() {
+        return $this->belongsTo(Booking::class, 'booking_seat');
+    }
 }
