@@ -15,7 +15,7 @@ return new class extends Migration
             $table->integer('row_number');
             $table->integer('seat_number');
 
-            $table->enum('type', ['standart', 'vip'])->default('standart');
+            $table->enum('type', ['standard', 'vip']);
 
             $table->timestamps();
         });
