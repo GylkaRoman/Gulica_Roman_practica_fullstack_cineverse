@@ -28,4 +28,9 @@ class SessionController extends Controller
 
         return $this->service->getAll($perPage, $date);
     }
+
+    public function seats(int $id)
+    {
+        return $this->service->getSeats($id);
+    }
 }

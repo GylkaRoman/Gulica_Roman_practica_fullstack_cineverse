@@ -18,3 +18,5 @@ Route::get('/halls', [HallController::class, 'index']);
 Route::post('/sessions', [SessionController::class, 'store']);
 
 Route::get('/sessions', [SessionController::class, 'index']);
+
+Route::get('/sessions/{id}/seats', [SessionController::class, 'seats']);

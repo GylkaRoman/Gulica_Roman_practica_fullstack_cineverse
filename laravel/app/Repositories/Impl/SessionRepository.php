@@ -6,6 +6,7 @@ use App\DTO\SessionDTO;
 use App\Models\MovieSession;
 use App\Models\Session;
 use App\Repositories\Interfaces\SessionRepositoryInterface;
+use Illuminate\Support\Facades\Session as FacadesSession;
 
 class SessionRepository implements SessionRepositoryInterface
 {
@@ -35,5 +36,10 @@ class SessionRepository implements SessionRepositoryInterface
             ->cursorPaginate($perPage);
         }
         return $query;
+    }
+
+    public function getSeats(int $id)
+    {
+        return MovieSession::with(['hall.seats'])->findOrFail($id);
     }
 }

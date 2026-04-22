@@ -9,4 +9,6 @@ interface SessionServiceInterface
     public function create(SessionDTO $dto);
 
     public function getAll(int $perPage, ?string $date = null);
+
+    public function getSeats(int $id);
 }
