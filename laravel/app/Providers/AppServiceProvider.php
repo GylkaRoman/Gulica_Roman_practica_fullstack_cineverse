@@ -2,15 +2,19 @@
 
 namespace App\Providers;
 
+use App\Repositories\Impl\BookingRepository;
 use App\Repositories\Impl\HallRepository;
 use App\Repositories\Impl\MovieRepository;
 use App\Repositories\Impl\SessionRepository;
+use App\Repositories\Interfaces\BookingRepositoryInterface;
 use App\Repositories\Interfaces\HallRepositoryInterface;
 use App\Repositories\Interfaces\MovieRepositoryInterface;
 use App\Repositories\Interfaces\SessionRepositoryInterface;
+use App\Services\Impl\BookingService;
 use App\Services\Impl\HallService;
 use App\Services\Impl\MovieService;
 use App\Services\Impl\SessionService;
+use App\Services\Interfaces\BookingServiceInterface;
 use App\Services\Interfaces\HallServiceInterface;
 use App\Services\Interfaces\MovieServiceInterface;
 use App\Services\Interfaces\SessionServiceInterface;
@@ -27,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(HallServiceInterface::class, HallService::class);
         $this->app->bind(SessionRepositoryInterface::class, SessionRepository::class);
         $this->app->bind(SessionServiceInterface::class, SessionService::class);
+        $this->app->bind(BookingRepositoryInterface::class, BookingRepository::class);
+        $this->app->bind(BookingServiceInterface::class, BookingService::class);
     }
 
     public function boot(): void

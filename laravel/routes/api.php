@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\HallController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\MovieController;
@@ -20,3 +21,7 @@ Route::post('/sessions', [SessionController::class, 'store']);
 Route::get('/sessions', [SessionController::class, 'index']);
 
 Route::get('/sessions/{id}/seats', [SessionController::class, 'seats']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/bookings', [BookingController::class, 'store']);
+});
