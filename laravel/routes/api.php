@@ -19,10 +19,16 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::middleware('auth:api')->group(function () {
+
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::post('/bookings', [BookingController::class, 'store']);
     Route::get('/user/bookings', [BookingController::class, 'index']);
     Route::post('/bookings/{id}/pay', [BookingController::class, 'pay']);
+});
+
+Route::middleware(['auth:api', 'role:admin'])->group(function () {
+    Route::post('/movies', [MovieController::class, 'store']);
+    Route::post('/halls', [HallController::class, 'store']);
 });
