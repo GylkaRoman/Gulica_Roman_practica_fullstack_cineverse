@@ -23,4 +23,9 @@ class BookingController extends Controller
 
         return $this->service->create($dto);
     }
+
+    public function index()
+    {
+        return $this->service->getUserBookings(auth()->id);
+    }
 }
