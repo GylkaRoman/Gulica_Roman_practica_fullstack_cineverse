@@ -45,4 +45,25 @@ class BookingService implements BookingServiceInterface
             return $booking;
         });
     }
+
+    public function getUserBookings(int $userId) {
+        $bookings = $this->repository->getUserBookings($userId);
+
+        return $bookings->map(function ($booking) {
+            return [
+            'id' => $booking->id,
+            'movie' => $booking->session->movie->title,
+            'date' => $booking->session->date,
+            'time' => $booking->session->time,
+            'hall' => $booking->session->hall->name,
+
+            'seats' => $booking->seats->map(function ($seat) {
+                return $seat->row_number . '-' . $seat->seat_number;
+            }),
+
+            'total_price' => $booking->total_price,
+            'status' => $booking->status,
+            ];
+        });
+    }
 }
