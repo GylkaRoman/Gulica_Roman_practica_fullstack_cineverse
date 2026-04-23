@@ -69,4 +69,25 @@ class BookingService implements BookingServiceInterface
             ];
         });
     }
+    public function pay(int $bookingId, int $userId)
+{
+    return DB::transaction(function () use ($bookingId, $userId) {
+
+        $booking = $this->repository->findById($bookingId);
+
+        if ($booking->user_id !== $userId) {
+            throw new \Exception('Forbidden');
+        }
+
+        if ($booking->status === 'paid') {
+            throw new \Exception('Already paid');
+        }
+
+        $booking->status = 'paid';
+        $booking->paid_at = now();
+        $booking->save();
+
+        return $booking;
+    });
+}
 }

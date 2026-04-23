@@ -9,4 +9,6 @@ interface BookingRepositoryInterface
     public function getBookedSeatIds(int $sessionId, array $seatIds);
 
     public function getUserBookings(int $userId);
+
+    public function findById(int $id);
 }

@@ -35,4 +35,10 @@ class BookingRepository implements BookingRepositoryInterface
         ->latest()
         ->get();
     }
+
+    public function findById(int $id)
+    {
+        return Booking::with(['seats', 'session.movie', 'session.hall'])
+            ->findOrFail($id);
+    }
 }

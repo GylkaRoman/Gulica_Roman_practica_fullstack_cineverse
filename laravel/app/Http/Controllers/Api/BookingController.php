@@ -28,4 +28,18 @@ class BookingController extends Controller
     {
         return $this->service->getUserBookings(auth()->id);
     }
+
+    public function pay($id)
+{
+    try {
+        $booking = $this->service->pay($id, auth()->id);
+
+        return response()->json($booking);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage()
+        ], 400);
+    }
+}
 }
