@@ -58,7 +58,10 @@ class BookingService implements BookingServiceInterface
             'hall' => $booking->session->hall->name,
 
             'seats' => $booking->seats->map(function ($seat) {
-                return $seat->row_number . '-' . $seat->seat_number;
+                return [
+                    'row' => $seat->row_number,
+                    'number' => $seat->seat_number,
+                ];
             }),
 
             'total_price' => $booking->total_price,

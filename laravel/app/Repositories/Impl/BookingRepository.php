@@ -20,6 +20,7 @@ class BookingRepository implements BookingRepositoryInterface
             ->join('bookings', 'booking_seat.booking_id', '=', 'bookings.id')
             ->where('bookings.session_id', $sessionId)
             ->whereIn('booking_seat.seat_id', $seatIds)
+            ->lockForUpdate()
             ->pluck('seat_id')
             ->toArray();
     }
