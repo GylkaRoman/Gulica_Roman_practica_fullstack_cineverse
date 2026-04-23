@@ -5,6 +5,7 @@ namespace App\Services\Impl;
 use App\DTO\BookingDTO;
 use App\Repositories\Interfaces\BookingRepositoryInterface;
 use App\Services\Interfaces\BookingServiceInterface;
+use Illuminate\Support\Facades\DB;
 
 class BookingService implements BookingServiceInterface
 {
@@ -15,20 +16,33 @@ class BookingService implements BookingServiceInterface
 
     public function create(BookingDTO $dto)
     {
-        $booking = $this->repository->create([
-            'user_id' => $dto->userId,
-            'session_id' => $dto->sessionId,
-            'status' => 'pending',
-            'total_price' => 0,
-        ]);
+        return DB::transaction(function () use ($dto) {
 
-        $booking->seats()->attach($dto->seatIds);
+            $bookedSeats = $this->repository->getBookedSeatIds(
+                $dto->sessionId,
+                $dto->seatIds
+            );
 
-        $pricePerSeat = 100;
-        $booking->total_price = count($dto->seatIds) * $pricePerSeat;
-        $booking->save();
+            if (!empty($bookedSeats)) {
+                throw new \Exception(
+                    'Seats already booked: ' . implode(',', $bookedSeats)
+                );
+            }
 
-        return $booking;
+            $booking = $this->repository->create([
+                'user_id' => $dto->userId,
+                'session_id' => $dto->sessionId,
+                'status' => 'pending',
+                'total_price' => 0,
+            ]);
+
+            $booking->seats()->attach($dto->seatIds);
+
+            $pricePerSeat = 100;
+            $booking->total_price = count($dto->seatIds) * $pricePerSeat;
+            $booking->save();
+
+            return $booking;
+        });
     }
-
 }
