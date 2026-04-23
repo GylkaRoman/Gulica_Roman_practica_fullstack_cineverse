@@ -5,25 +5,23 @@ use App\Http\Controllers\Api\HallController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\MovieController;
 use App\Http\Controllers\Api\SessionController;
-
-Route::post('/movies', [MovieController::class, 'store']);
+use App\Http\Controllers\Api\AuthController;
 
 Route::get('/movies', [MovieController::class, 'index']);
-
 Route::get('/movies/{id}', [MovieController::class, 'show']);
-
-Route::post('/halls', [HallController::class, 'store']);
-
 Route::get('/halls', [HallController::class, 'index']);
-
-Route::post('/sessions', [SessionController::class, 'store']);
-
 Route::get('/sessions', [SessionController::class, 'index']);
-
 Route::get('/sessions/{id}/seats', [SessionController::class, 'seats']);
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/bookings', [BookingController::class, 'store']);
+Route::prefix('auth')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+});
 
+Route::middleware('auth:api')->group(function () {
+    Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::post('/bookings', [BookingController::class, 'store']);
     Route::get('/user/bookings', [BookingController::class, 'index']);
 });
