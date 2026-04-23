@@ -24,4 +24,6 @@ Route::get('/sessions/{id}/seats', [SessionController::class, 'seats']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/bookings', [BookingController::class, 'store']);
+
+    Route::get('/user/bookings', [BookingController::class, 'index']);
 });
