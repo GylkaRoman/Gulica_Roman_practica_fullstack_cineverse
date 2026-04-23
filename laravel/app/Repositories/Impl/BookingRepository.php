@@ -23,4 +23,15 @@ class BookingRepository implements BookingRepositoryInterface
             ->pluck('seat_id')
             ->toArray();
     }
+
+    public function getUserBookings(int $userId) {
+        return Booking::with([
+            'session.movie',
+            'session.hall',
+            'seats',
+        ])
+        ->where('user_id', $userId)
+        ->latest()
+        ->get();
+    }
 }
