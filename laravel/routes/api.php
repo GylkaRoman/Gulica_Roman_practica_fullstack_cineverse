@@ -13,6 +13,7 @@ Route::get('/movies/{id}', [MovieController::class, 'show']);
 Route::get('/halls', [HallController::class, 'index']);
 Route::get('/sessions', [SessionController::class, 'index']);
 Route::get('/sessions/{id}/seats', [SessionController::class, 'seats']);
+
 Route::get('/prices', [PriceController::class, 'index']);
 
 Route::prefix('auth')->group(function () {
