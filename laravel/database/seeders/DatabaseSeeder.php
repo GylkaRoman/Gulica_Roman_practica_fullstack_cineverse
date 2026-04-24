@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             HallSeeder::class,
             SeatSeeder::class,
             SessionSeeder::class,
+            PriceSeeder::class,
         ]);
     }
 }

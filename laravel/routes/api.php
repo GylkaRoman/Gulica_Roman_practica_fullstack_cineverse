@@ -6,12 +6,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\MovieController;
 use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PriceController;
 
 Route::get('/movies', [MovieController::class, 'index']);
 Route::get('/movies/{id}', [MovieController::class, 'show']);
 Route::get('/halls', [HallController::class, 'index']);
 Route::get('/sessions', [SessionController::class, 'index']);
 Route::get('/sessions/{id}/seats', [SessionController::class, 'seats']);
+Route::get('/prices', [PriceController::class, 'index']);
 
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
