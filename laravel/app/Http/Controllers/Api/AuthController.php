@@ -9,7 +9,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RefreshRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Services\Interfaces\AuthServiceInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -19,16 +19,12 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        return $this->service->register(
-            RegisterDTO::fromArray($request->validated())
-        );
+        return $this->service->register($request->validated());
     }
 
     public function login(LoginRequest $request)
     {
-        return $this->service->login(
-            LoginDTO::fromArray($request->validated())
-        );
+        return $this->service->login($request->validated());
     }
 
     public function refresh(RefreshRequest $request)
@@ -41,8 +37,8 @@ class AuthController extends Controller
         return $this->service->me();
     }
 
-    public function logout(RefreshRequest $request)
+    public function logout()
     {
-        return $this->service->logout($request->validated()['refresh_token']);
+        return $this->service->logout();
     }
 }

@@ -6,7 +6,7 @@ use App\DTO\BookingDTO;
 
 interface BookingServiceInterface
 {
-    public function create(BookingDTO $dto);
+    public function create(array $data, int $userId);
 
     public function getUserBookings(int $userId);
 

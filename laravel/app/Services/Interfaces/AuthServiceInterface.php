@@ -7,9 +7,9 @@ use App\DTO\Auth\RegisterDTO;
 
 interface AuthServiceInterface
 {
-    public function register(RegisterDTO $dto);
-    public function login(LoginDTO $dto);
+    public function register(array $data);
+    public function login(array $data);
     public function refresh(string $refreshToken);
     public function me();
-    public function logout(string $refreshToken);
+    public function logout();
 }

@@ -3,6 +3,7 @@
 namespace App\Services\Impl;
 
 use App\DTO\BookingDTO;
+use App\Models\Booking;
 use App\Repositories\Interfaces\BookingRepositoryInterface;
 use App\Services\Interfaces\BookingServiceInterface;
 use Illuminate\Support\Facades\DB;
@@ -14,13 +15,13 @@ class BookingService implements BookingServiceInterface
         private BookingRepositoryInterface $repository
     ) {}
 
-    public function create(BookingDTO $dto)
+    public function create(array $data, int $userId)
     {
-        return DB::transaction(function () use ($dto) {
+        return DB::transaction(function () use ($data, $userId) {
 
             $bookedSeats = $this->repository->getBookedSeatIds(
-                $dto->sessionId,
-                $dto->seatIds
+                $data['session_id'],
+                $data['seat_ids']
             );
 
             if (!empty($bookedSeats)) {
@@ -30,19 +31,21 @@ class BookingService implements BookingServiceInterface
             }
 
             $booking = $this->repository->create([
-                'user_id' => $dto->userId,
-                'session_id' => $dto->sessionId,
+                'user_id' => $userId,
+                'session_id' => $data['session_id'],
                 'status' => 'pending',
                 'total_price' => 0,
             ]);
 
-            $booking->seats()->attach($dto->seatIds);
+            $this->repository->attachSeats($booking, $data['seat_ids']);
 
             $pricePerSeat = 100;
-            $booking->total_price = count($dto->seatIds) * $pricePerSeat;
-            $booking->save();
 
-            return $booking;
+            $this->repository->update($booking, [
+                'total_price' => count($data['seat_ids']) * $pricePerSeat,
+            ]);
+
+            return $this->repository->findWithRelations($booking->id);
         });
     }
 
@@ -84,7 +87,6 @@ class BookingService implements BookingServiceInterface
         }
 
         $booking->status = 'paid';
-        $booking->paid_at = now();
         $booking->save();
 
         return $booking;

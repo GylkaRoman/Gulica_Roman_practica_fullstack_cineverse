@@ -21,32 +21,27 @@ class AuthService implements AuthServiceInterface
         $this->auth = auth('api');
     }
 
-    public function register(RegisterDTO $dto)
+    public function register(array $data)
     {
         $user = User::create([
-            'name' => $dto->name,
-            'email' => $dto->email,
-            'password' => Hash::make($dto->password),
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
             'role' => 'user',
         ]);
 
-        $token = $this->auth->login($user);
-
-        return $this->makeResponse($token);
+        $this->auth->login($user);
     }
 
-    public function login(LoginDTO $dto)
+    public function login(array $data)
     {
-        $credentials = [
-            'email' => $dto->email,
-            'password' => $dto->password,
-        ];
-
-        if (!$token = $this->auth->attempt($credentials)) {
+        if (!$token = $this->auth->attempt($data)) {
             throw new \Exception('Unauthorized');
         }
 
         $user = auth('api')->user();
+
+        RefreshToken::where('user_id', $user->id)->delete();
 
         $refreshToken = hash('sha256', Str::random(64));
 
@@ -74,37 +69,33 @@ class AuthService implements AuthServiceInterface
             throw new \Exception('Invalid refresh token');
         }
 
-        $user = User::find($refresh->user_id);
+        $user = User::find($refresh->user_id);;
 
-        $token = $this->auth->login($user);
+        $accessToken = $this->auth->login($user);
 
-        return $this->makeResponse($token);
+        return [
+            'access_token' => $accessToken,
+            'refresh_token' => $refresh['token'],
+            'token_type' => 'bearer',
+            'expires_in' => $this->auth->factory()->getTTL() * 60,
+        ];
     }
 
     public function me()
     {
-        return auth('api')->user();
+        return $this->auth->user();
     }
 
-    public function logout(string $refreshToken)
+    public function logout()
     {
+
+        $user = $this->auth->user();
+
+        RefreshToken::where('user_id', $user->id)->delete();
+
         $this->auth->logout();
 
-        if ($refreshToken) {
-            RefreshToken::where('token', $refreshToken)->delete();
-        } else {
-            RefreshToken::where('user_id', auth('api')->id())->delete();
-        }
-
-        return ['message' => 'Logged out'];
-    }
-
-    private function makeResponse($token)
-    {
-        return [
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => $this->auth->factory()->getTTL() * 60,
-        ];
+        return response()->json(['message' => 'Logged out']);
+    
     }
 }
