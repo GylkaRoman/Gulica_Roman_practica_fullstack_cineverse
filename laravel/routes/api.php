@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PriceController;
 
+
 Route::get('/movies', [MovieController::class, 'index']);
 Route::get('/movies/{id}', [MovieController::class, 'show']);
 Route::get('/halls', [HallController::class, 'index']);
