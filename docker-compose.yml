@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
 
   app:
@@ -5,10 +7,10 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: cineverse_app
-    working_dir: /var/www
+    working_dir: /var/www/laravel
     volumes:
-      - ./:/var/www
-      - storage_data:/var/www/storage
+      - ./:/var/www:delegated
+      - storage_data:/var/www/laravel/storage
     depends_on:
       - db
 
@@ -18,7 +20,7 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./:/var/www
+      - ./:/var/www:delegated
       - ./docker/nginx:/etc/nginx/conf.d
     depends_on:
       - app
@@ -44,7 +46,6 @@ services:
       PMA_HOST: db
     depends_on:
       - db
-
 volumes:
   db_data:
   storage_data:
