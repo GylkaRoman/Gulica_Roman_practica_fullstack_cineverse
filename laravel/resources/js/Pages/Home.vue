@@ -1,5 +1,13 @@
 <template>
-  <div class="p-10 text-3xl">
-    CineV
-  </div>
+  <MainLayout>
+    
+    <section>
+
+    </section>
+
+  </MainLayout>
 </template>
+
+<script setup>
+import MainLayout from '@/Layouts/MainLayout.vue'
+</script>

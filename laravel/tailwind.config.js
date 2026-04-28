@@ -5,7 +5,15 @@ export default {
     "./resources/**/*.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#EFD915"
+      },
+      fontFamily: {
+        orbitron: ['Orbitron', 'sans-serif'],
+        space: ['Space Grotesk', 'sans-serif']
+      }
+    },
   },
   plugins: [],
 }
