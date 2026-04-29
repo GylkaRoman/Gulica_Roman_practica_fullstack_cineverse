@@ -22,7 +22,7 @@ class MovieController extends Controller
 
     public function index(Request $request)
     {
-        $perPage = $request->query('per_page', 10);
+        $perPage = $request->query('per_page', 20);
         return $this->service->getAll($perPage);
     }
 

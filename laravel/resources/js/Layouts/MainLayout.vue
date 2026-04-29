@@ -3,7 +3,7 @@
 
     <Navbar />
 
-    <main class=" flex-1 container mx-auto">
+    <main class=" flex-1 container mx-auto py-9">
       <slot />
     </main>
 
