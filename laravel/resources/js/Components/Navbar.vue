@@ -2,22 +2,20 @@
     <nav class="flex bg-black py-8 px-7 justify-between items-center font-space">
         <div class="flex">
             <div class="text-primary mr-2">CineVerse</div>
-            <img :src="logo" class="h-6"/>
+            <img :src="logo" class="h-6" />
         </div>
         <ul class="flex gap-6 items-center">
-
             <li>
-                <a href="#"
+                <Link href="/main"
                     class="text-primary relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full">
                     Main
-                </a>
+                </Link>
             </li>
-
             <li>
-                <a href="#"
+                <Link href="/program"
                     class="text-primary relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full">
-                    Movies
-                </a>
+                    Program
+                </Link>
             </li>
 
             <li>
@@ -49,4 +47,6 @@
 
 <script setup>
 import logo from '@/assets/cineverse_logo.png'
+import { Link } from '@inertiajs/vue3'
+
 </script>

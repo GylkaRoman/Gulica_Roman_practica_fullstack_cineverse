@@ -40,9 +40,9 @@ onMounted(async () => {
 <template>
     <div class="container px-8 mt-10">
 
-        <h2 class="text-3xl font-orbitron text-primary mb-6">
+        <div class="flex gap-4 flex-wrap bg-black px-5 py-5 rounded-lg text-3xl font-orbitron text-primary mb-6">
             Soon in cinema
-        </h2>
+        </div>
 
         <Swiper v-if="soonMovies.length" :modules="[Autoplay, Navigation, Pagination]" :slides-per-view="3"
             :space-between="20" :loop="soonMovies.length > 1" :autoplay="{ delay: 4000 }" :navigation="true"
