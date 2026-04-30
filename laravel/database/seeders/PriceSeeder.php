@@ -17,7 +17,7 @@ class PriceSeeder extends Seeder
             ['type' => 'standard', 'format' => '2D', 'price' => 100],
             ['type' => 'standard', 'format' => '3D', 'price' => 150],
             ['type' => 'vip', 'format' => '2D', 'price' => 200],
-            ['type' => 'vip', 'format' => '3D', 'price' => 2500],
+            ['type' => 'vip', 'format' => '3D', 'price' => 250],
             ['type' => 'student', 'format' => '2D', 'price' => 70],
             ['type' => 'child', 'format' => '2D', 'price' => 50],
         ];

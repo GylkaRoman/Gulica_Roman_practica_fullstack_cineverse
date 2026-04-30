@@ -12,3 +12,6 @@ Route::get('/main', function () {
 Route::get('/program', function () {
     return Inertia::render('Program');
 });
+Route::get('/price', function () {
+    return Inertia::render('Price');
+});
