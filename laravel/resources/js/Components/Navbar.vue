@@ -29,16 +29,13 @@
                     Contact
                 </Link>
             </li>
-
             <li>
-                <a href="#"
+                <Link href="/rules"
                     class="text-primary relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full">
                     Rules
-                </a>
+                </Link>
             </li>
-
         </ul>
-
         <a class="text-black bg-primary px-5 py-3 rounded-lg" href="">Register</a>
     </nav>
 </template>

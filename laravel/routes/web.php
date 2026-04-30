@@ -18,3 +18,6 @@ Route::get('/price', function () {
 Route::get('/contact', function () {
     return Inertia::render('Contact');
 });
+Route::get('/rules', function () {
+    return Inertia::render('Rules');
+});
