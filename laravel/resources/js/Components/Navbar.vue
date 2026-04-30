@@ -23,12 +23,11 @@
                     Prices
                 </Link>
             </li>
-
             <li>
-                <a href="#"
+                <Link href="/contact"
                     class="text-primary relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full">
                     Contact
-                </a>
+                </Link>
             </li>
 
             <li>

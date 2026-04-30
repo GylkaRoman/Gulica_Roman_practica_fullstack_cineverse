@@ -15,3 +15,6 @@ Route::get('/program', function () {
 Route::get('/price', function () {
     return Inertia::render('Price');
 });
+Route::get('/contact', function () {
+    return Inertia::render('Contact');
+});
