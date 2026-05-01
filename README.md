@@ -42,17 +42,21 @@ composer install
 cp .env.example .env
 ```
 
-### 7. Generate key
+### 7. Generate app key
 ```
 php artisan key:generate
 ```
-
-### 8. Run migrations
+### 8. Generate JWT secret
 ```
-php artisan migrate
+php artisan jwt:secret
 ```
 
-### Open the project in the browser
+### 9. Run migrations and seeder with test data
+```
+php artisan migrate --seed
+```
+
+### 10 Open the project in the browser
 Site:
 http://localhost:8000
 
