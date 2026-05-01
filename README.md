@@ -57,7 +57,12 @@ php artisan jwt:secret
 php artisan migrate --seed
 ```
 
-### 10 Open the project in the browser
+### 10. Add rights
+```
+mkdir -p storage/framework/{cache,sessions,views} bootstrap/cache && chmod -R 777 storage bootstrap/cache && php artisan optimize:clear
+```
+
+### 11 Open the project in the browser
 Site:
 http://localhost:8000
 
