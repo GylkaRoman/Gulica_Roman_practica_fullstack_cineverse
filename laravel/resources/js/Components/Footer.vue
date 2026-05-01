@@ -1,5 +1,5 @@
 <template>
-  <footer class="flex flex-col bg-black py-14 px-10 justify-around font-space">
+  <footer class="flex flex-col bg-gray-950 py-14 px-10 justify-around font-space">
     <div class="flex justify-around items-center font-space">
       <div class="flex flex-col gap-4">
         <div class="flex">

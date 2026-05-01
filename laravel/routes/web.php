@@ -21,3 +21,8 @@ Route::get('/contact', function () {
 Route::get('/rules', function () {
     return Inertia::render('Rules');
 });
+
+Route::get('/login', fn() => Inertia::render('Login'));
+Route::get('/register', fn() => Inertia::render('Register'));
+Route::get('/profile', fn() => Inertia::render('Profile'));
+Route::get('/admin', fn() => Inertia::render('Admin'));

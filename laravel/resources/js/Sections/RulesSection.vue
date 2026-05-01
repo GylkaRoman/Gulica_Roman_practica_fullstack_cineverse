@@ -1,10 +1,10 @@
 <template>
     <div class="container mx-auto px-8 py-10 text-white max-w-4xl">
 
-        <div class="flex gap-4 flex-wrap bg-black px-5 py-5 rounded-lg text-3xl font-orbitron text-primary mb-6">
+        <div class="flex gap-4 flex-wrap bg-gray-950 px-5 py-5 rounded-lg text-3xl font-orbitron text-primary mb-6">
             Rules
         </div>
-        <div class="space-y-6 text-primary bg-black px-5 py-5 rounded-lg">
+        <div class="space-y-6 text-primary bg-gray-950 px-5 py-5 rounded-lg">
 
             <p>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium nulla culpa, eius animi, ad libero

@@ -16,7 +16,7 @@ onMounted(async () => {
 <template>
     <div class="container px-8 mt-10 text-white">
 
-        <div class="flex gap-4 flex-wrap bg-black px-5 py-5 rounded-lg text-3xl font-orbitron text-primary mb-6">
+        <div class="flex gap-4 flex-wrap bg-gray-950 px-5 py-5 rounded-lg text-3xl font-orbitron text-primary mb-6">
             Prices
         </div>
 

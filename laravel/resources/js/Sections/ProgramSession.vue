@@ -69,17 +69,17 @@ const languages = computed(() => {
 </script>
 
 <template>
-    <div class="container px-8 mt-10 text-black font-bold font-space">
+    <div class="container px-8 mt-10 text-primary font-bold font-space">
 
-        <div class="flex gap-4 mb-8 flex-wrap bg-black px-5 py-5 rounded-lg">
-            <select v-model="selectedDate" class="p-2 bg-primary rounded">
+        <div class="flex gap-4 mb-8 flex-wrap bg-gray-950 px-5 py-5 rounded-lg">
+            <select v-model="selectedDate" class="p-2 bg-primary rounded text-gray-950">
                 <option value="">All dates</option>
                 <option v-for="d in availableDates" :key="d" :value="d">
                     {{ d }}
                 </option>
             </select>
 
-            <select v-model="selectedGenre" class="p-2 bg-primary rounded">
+            <select v-model="selectedGenre" class="p-2 bg-primary rounded text-gray-950">
                 <option value="">All genres</option>
 
                 <option v-for="g in genres" :key="g" :value="g">
@@ -87,7 +87,7 @@ const languages = computed(() => {
                 </option>
             </select>
 
-            <select v-model="selectedLanguage" class="p-2 bg-primary rounded">
+            <select v-model="selectedLanguage" class="p-2 bg-primary rounded text-gray-950">
                 <option value="">All languages</option>
 
                 <option v-for="l in languages" :key="l" :value="l">
@@ -100,7 +100,7 @@ const languages = computed(() => {
         <div v-if="groupedMovies.length" class="grid lg:grid-cols-4 gap-6">
 
             <div v-for="item in groupedMovies" :key="item.movie.id"
-                class="bg-primary rounded-2xl overflow-hidden shadow-lg">
+                class="bg-gray-950 rounded-2xl overflow-hidden shadow-lg">
 
                 <div class="relative h-[300px]">
                     <img :src="item.movie.poster_url" class=" w-full h-full" />
@@ -126,7 +126,7 @@ const languages = computed(() => {
 
                     <div class="flex flex-col gap-2">
 
-                        <div v-for="s in item.sessions" :key="s.id" class=" bg-amber-500 p-2 rounded">
+                        <div v-for="s in item.sessions" :key="s.id" class=" bg-gray-800 p-2 rounded">
                             <div class="">
                                 {{ s.date }} | {{ s.time.slice(0, 5) }}
                             </div>

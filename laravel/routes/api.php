@@ -24,12 +24,12 @@ Route::prefix('auth')->group(function () {
     
     Route::middleware('auth:api')->group(function () {
         
-    Route::get('/profile', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::post('/bookings', [BookingController::class, 'store']);
     Route::get('/user/bookings', [BookingController::class, 'index']);
     Route::post('/bookings/{id}/pay', [BookingController::class, 'pay']);
+    Route::get('/profile', [AuthController::class, 'me']);
 });
 
 Route::middleware(['auth:api', 'role:admin'])->group(function () {

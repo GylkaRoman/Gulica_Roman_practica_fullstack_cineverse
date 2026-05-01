@@ -1,7 +1,7 @@
 <template>
   <div class="container px-8 mt-10 text-white">
 
-    <div class="flex gap-4 flex-wrap bg-black px-5 py-5 rounded-lg text-3xl font-orbitron text-primary mb-6">
+    <div class="flex gap-4 flex-wrap bg-gray-950 px-5 py-5 rounded-lg text-3xl font-orbitron text-primary mb-6">
       Contact Us
     </div>
 
@@ -13,11 +13,11 @@
 
         <form @submit.prevent="sendMessage" class="flex flex-col gap-3 text-black">
 
-          <input type="text" placeholder="Name" class="p-2 rounded" required />
+          <input type="text" placeholder="Name" class="p-2 rounded bg-gray-800" required/>
 
-          <input type="email" placeholder="Email" class="p-2 rounded" required />
+          <input type="email" placeholder="Email" class="p-2 rounded bg-gray-800" required/>
 
-          <textarea placeholder="Message" class="p-2 rounded h-32" required></textarea>
+          <textarea placeholder="Message" class="p-2 rounded h-32 bg-gray-800" require></textarea>
 
           <button class="bg-primary py-2 rounded font-bold hover:opacity-80 text-black">
             Send

@@ -30,7 +30,7 @@ const convertToEmbed = (url) => {
 
       <SwiperSlide v-for="movie in movies" :key="movie.id">
 
-        <div class="relative h-[500px] w-full overflow-hidden bg-black rounded-2xl">
+        <div class="relative h-[500px] w-full overflow-hidden bg-gray-950 rounded-2xl">
 
           <iframe class="absolute top-1/2 left-1/2 w-[170%] h-[170%] -translate-x-1/2 -translate-y-1/2"
             :src="convertToEmbed(movie.trailer_url)"></iframe>
