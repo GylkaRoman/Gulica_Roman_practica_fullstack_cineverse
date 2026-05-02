@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Autoplay, Navigation, Pagination } from 'swiper/modules'
+import { Link } from '@inertiajs/vue3'
 
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -49,23 +50,28 @@ onMounted(async () => {
             :pagination="{ clickable: true }" class="h-[490px]">
 
             <SwiperSlide v-for="movie in soonMovies" :key="movie.id">
-                <div class="relative h-[450px] w-full text-white overflow-hidden rounded-2xl">
 
-                    <img :src="movie.poster_url" class="absolute inset-0 w-full h-full" />
+                <Link :href="`/movie/${movie.id}`" class="block">
 
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
+                    <div class="relative h-[450px] overflow-hidden rounded-2xl 
+                    cursor-pointer">
 
-                    <div class="absolute inset-0 flex items-end">
-                        <div class="p-6">
-                            <h1 class="text-2xl font-orbitron text-primary">
-                                {{ movie.title }}
-                            </h1>
+                        <img :src="movie.poster_url" class="absolute inset-0 w-full h-full" />
 
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
 
+                        <div class="absolute inset-0 flex items-end">
+                            <div class="p-6">
+                                <h1 class="text-2xl font-orbitron text-primary">
+                                    {{ movie.title }}
+                                </h1>
+                            </div>
                         </div>
+
                     </div>
 
-                </div>
+                </Link>
+
             </SwiperSlide>
 
         </Swiper>

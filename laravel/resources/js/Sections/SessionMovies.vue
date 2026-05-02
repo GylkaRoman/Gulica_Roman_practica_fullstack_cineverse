@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Autoplay, Navigation, Pagination } from 'swiper/modules'
+import { Link } from '@inertiajs/vue3'
 
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -29,29 +30,34 @@ onMounted(async () => {
 
       <SwiperSlide v-for="session in sessions" :key="session.id">
 
-        <div class="relative h-[450px] w-full text-white overflow-hidden rounded-2xl">
+        <Link :href="`/movie/${session.movie.id}`" class="">
 
-          <img :src="session.movie.poster_url" class="absolute inset-0 object-cover" />
+          <div
+            class="relative h-[450px] w-full overflow-hidden rounded-2xl cursor-pointer">
 
-          <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
+            <img :src="session.movie.poster_url" class="absolute inset-0 object-cover" />
 
-          <div class="absolute inset-0 flex items-end">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
 
-            <div class="p-6">
+            <div class="absolute inset-0 flex items-end">
 
-              <h1 class="text-2xl font-orbitron text-primary">
-                {{ session.movie.title }}
-              </h1>
+              <div class="p-6">
 
-              <p class="text-sm mt-1">
-                {{ session.date }} / {{ session.time.slice(0, 5) }}
-              </p>
+                <h1 class="text-2xl font-orbitron text-primary">
+                  {{ session.movie.title }}
+                </h1>
+
+                <p class="text-sm mt-1">
+                  {{ session.date }} / {{ session.time.slice(0, 5) }}
+                </p>
+
+              </div>
 
             </div>
 
           </div>
 
-        </div>
+        </Link>
 
       </SwiperSlide>
 

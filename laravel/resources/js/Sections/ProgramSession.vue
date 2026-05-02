@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { Link } from '@inertiajs/vue3'
 
 const sessions = ref([])
 
@@ -102,17 +103,18 @@ const languages = computed(() => {
             <div v-for="item in groupedMovies" :key="item.movie.id"
                 class="bg-gray-950 rounded-2xl overflow-hidden shadow-lg">
 
-                <div class="relative h-[300px]">
-                    <img :src="item.movie.poster_url" class=" w-full h-full" />
+                <Link :href="`/movie/${item.movie.id}`">
+                    <div class="relative h-[300px] cursor-pointer">
+                        <img :src="item.movie.poster_url" class="w-full h-full" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
 
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
-
-                    <div class="absolute bottom-3 left-3 right-3">
-                        <h2 class="text-lg font-bold text-primary">
-                            {{ item.movie.title }}
-                        </h2>
+                        <div class="absolute bottom-3 left-3 right-3">
+                            <h2 class="text-lg font-bold text-primary">
+                                {{ item.movie.title }}
+                            </h2>
+                        </div>
                     </div>
-                </div>
+                </Link>
 
                 <div class="p-4">
 
