@@ -14,7 +14,6 @@ import SoonMovies from '@/Sections/SoonMovies.vue'
     <SessionMovies />
     <SoonMovies />
 
-
   </MainLayout>
 </template>
 
