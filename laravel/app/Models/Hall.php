@@ -12,8 +12,8 @@ class Hall extends Model
         'seats_per_row',
     ];
 
-    public function seats() 
+    public function seats()
     {
-        return $this->hasMany(Seat::class);
+        return $this->hasMany(Seat::class, 'hall_id', 'id');
     }
 }

@@ -40,4 +40,10 @@ class BookingController extends Controller
             ], 400);
         }
     }
+    public function destroy($id)
+    {
+        $this->service->destroy($id);
+
+        return response()->json(['success' => true]);
+    }
 }

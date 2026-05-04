@@ -49,21 +49,24 @@ onMounted(async () => {
 </script>
 
 <template>
-<div class="min-h-screen bg-black text-white p-10">
+    <div class="min-h-screen bg-black text-white p-10">
 
-    <div class="max-w-2xl mx-auto bg-gray-900 p-8 rounded-2xl">
+        <div class="max-w-2xl mx-auto bg-gray-900 p-8 rounded-2xl">
 
-        <h1 class="text-3xl text-primary mb-6">Profile</h1>
+            <h1 class="text-3xl text-primary mb-6">Profile</h1>
 
-        <p>Name: {{ user?.name }}</p>
-        <p>Email: {{ user?.email }}</p>
+            <p>Name: {{ user?.name }}</p>
+            <p>Email: {{ user?.email }}</p>
 
-        <button @click="logout"
-                class="mt-6 bg-red-500 px-4 py-2 rounded">
-            Logout
-        </button>
+            <button @click="router.visit('/my-bookings')" class="mt-6 bg-blue-500 px-4 py-2 rounded">
+                My Bookings
+            </button>
+
+            <button @click="logout" class="mt-3 bg-red-500 px-4 py-2 rounded">
+                Logout
+            </button>
+
+        </div>
 
     </div>
-
-</div>
 </template>

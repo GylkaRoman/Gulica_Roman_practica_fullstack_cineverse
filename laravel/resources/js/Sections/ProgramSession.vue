@@ -57,6 +57,7 @@ const groupedMovies = computed(() => {
 onMounted(async () => {
     sessions.value = await fetchSessions()
 })
+
 const genres = computed(() => {
     const set = new Set(sessions.value.map(s => s.movie.genre))
     return Array.from(set)
@@ -66,13 +67,13 @@ const languages = computed(() => {
     const set = new Set(sessions.value.map(s => s.language))
     return Array.from(set)
 })
-
 </script>
 
 <template>
     <div class="container px-8 mt-10 text-primary font-bold font-space">
 
         <div class="flex gap-4 mb-8 flex-wrap bg-gray-950 px-5 py-5 rounded-lg">
+
             <select v-model="selectedDate" class="p-2 bg-primary rounded text-gray-950">
                 <option value="">All dates</option>
                 <option v-for="d in availableDates" :key="d" :value="d">
@@ -82,7 +83,6 @@ const languages = computed(() => {
 
             <select v-model="selectedGenre" class="p-2 bg-primary rounded text-gray-950">
                 <option value="">All genres</option>
-
                 <option v-for="g in genres" :key="g" :value="g">
                     {{ g }}
                 </option>
@@ -90,7 +90,6 @@ const languages = computed(() => {
 
             <select v-model="selectedLanguage" class="p-2 bg-primary rounded text-gray-950">
                 <option value="">All languages</option>
-
                 <option v-for="l in languages" :key="l" :value="l">
                     {{ l.toUpperCase() }}
                 </option>
@@ -104,8 +103,11 @@ const languages = computed(() => {
                 class="bg-gray-950 rounded-2xl overflow-hidden shadow-lg">
 
                 <Link :href="`/movie/${item.movie.id}`">
-                    <div class="relative h-[300px] cursor-pointer">
-                        <img :src="item.movie.poster_url" class="w-full h-full" />
+                    <div class="relative h-[300px] cursor-pointer group">
+
+                        <img :src="item.movie.poster_url"
+                            class="w-full h-full object-cover group-hover:scale-105 transition" />
+
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
 
                         <div class="absolute bottom-3 left-3 right-3">
@@ -113,6 +115,7 @@ const languages = computed(() => {
                                 {{ item.movie.title }}
                             </h2>
                         </div>
+
                     </div>
                 </Link>
 
@@ -128,15 +131,16 @@ const languages = computed(() => {
 
                     <div class="flex flex-col gap-2">
 
-                        <div v-for="s in item.sessions" :key="s.id" class=" bg-gray-800 p-2 rounded">
-                            <div class="">
+                        <Link v-for="s in item.sessions" :key="s.id" :href="`/session/${s.id}`"
+                            class="bg-gray-800 p-2 rounded hover:bg-primary hover:text-black transition cursor-pointer">
+                            <div>
                                 {{ s.date }} | {{ s.time.slice(0, 5) }}
                             </div>
 
-                            <div class="">
+                            <div>
                                 {{ s.hall.name }} | {{ s.format }} | {{ s.language.toUpperCase() }}
                             </div>
-                        </div>
+                        </Link>
 
                     </div>
 

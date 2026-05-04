@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Interfaces;
 
+use App\Models\Booking;
+
 interface BookingRepositoryInterface
 {
     public function create(array $data);
@@ -11,4 +13,8 @@ interface BookingRepositoryInterface
     public function attachSeats($booking, array $seatIds);
     public function update($booking, array $data);
     public function findWithRelations(int $id);
+
+    public function findPendingForUser(int $id, int $userId);
+
+    public function delete(Booking $booking);
 }

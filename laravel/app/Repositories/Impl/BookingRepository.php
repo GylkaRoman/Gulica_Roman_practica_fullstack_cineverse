@@ -14,15 +14,16 @@ class BookingRepository implements BookingRepositoryInterface
         return Booking::create($data);
     }
 
-    public function getUserBookings(int $userId) {
+    public function getUserBookings(int $userId)
+    {
         return Booking::with([
             'session.movie',
             'session.hall',
             'seats',
         ])
-        ->where('user_id', $userId)
-        ->latest()
-        ->get();
+            ->where('user_id', $userId)
+            ->latest()
+            ->get();
     }
 
     public function findById(int $id)
@@ -54,5 +55,16 @@ class BookingRepository implements BookingRepositoryInterface
             ->whereIn('booking_seat.seat_id', $seatIds)
             ->pluck('seat_id')
             ->toArray();
+    }
+    public function findPendingForUser(int $id, int $userId)
+    {
+        return Booking::where('id', $id)
+            ->where('user_id', $userId)
+            ->where('status', 'pending')
+            ->first();
+    }
+    public function delete(Booking $booking)
+    {
+        return $booking->delete();
     }
 }

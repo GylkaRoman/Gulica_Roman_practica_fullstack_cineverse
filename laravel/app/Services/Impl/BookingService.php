@@ -49,47 +49,68 @@ class BookingService implements BookingServiceInterface
         });
     }
 
-    public function getUserBookings(int $userId) {
+    public function getUserBookings(int $userId)
+    {
         $bookings = $this->repository->getUserBookings($userId);
 
         return $bookings->map(function ($booking) {
             return [
-            'id' => $booking->id,
-            'movie' => $booking->session->movie->title,
-            'date' => $booking->session->date,
-            'time' => $booking->session->time,
-            'hall' => $booking->session->hall->name,
+                'id' => $booking->id,
+                'movie' => $booking->session->movie->title,
+                'date' => $booking->session->date,
+                'time' => $booking->session->time,
+                'hall' => $booking->session->hall->name,
 
-            'seats' => $booking->seats->map(function ($seat) {
-                return [
-                    'row' => $seat->row_number,
-                    'number' => $seat->seat_number,
-                ];
-            }),
+                'seats' => $booking->seats->map(function ($seat) {
+                    return [
+                        'row' => $seat->row_number,
+                        'number' => $seat->seat_number,
+                    ];
+                }),
 
-            'total_price' => $booking->total_price,
-            'status' => $booking->status,
+                'total_price' => $booking->total_price,
+                'status' => $booking->status,
             ];
         });
     }
+
     public function pay(int $bookingId, int $userId)
-{
-    return DB::transaction(function () use ($bookingId, $userId) {
+    {
+        return DB::transaction(function () use ($bookingId, $userId) {
 
-        $booking = $this->repository->findById($bookingId);
+            $booking = $this->repository->findById($bookingId);
 
-        if ($booking->user_id !== $userId) {
-            throw new \Exception('Forbidden');
+            $user = \App\Models\User::find(auth('api')->id());
+
+            if ($booking->user_id !== $userId) {
+                throw new \Exception('Forbidden');
+            }
+
+            if ($booking->status === 'paid') {
+                throw new \Exception('Already paid');
+            }
+
+            if ($user->balance < $booking->total_price) {
+                throw new \Exception('Not enough balance');
+            }
+
+            $user->balance -= $booking->total_price;
+            $user->save();
+
+            $booking->status = 'paid';
+            $booking->save();
+
+            return $booking;
+        });
+    }
+    public function destroy(int $id)
+    {
+        $booking = $this->repository->findPendingForUser($id, auth('api')->id());
+
+        if (!$booking) {
+            throw new \Exception('Booking not found or not allowed');
         }
 
-        if ($booking->status === 'paid') {
-            throw new \Exception('Already paid');
-        }
-
-        $booking->status = 'paid';
-        $booking->save();
-
-        return $booking;
-    });
-}
+        $this->repository->delete($booking);
+    }
 }

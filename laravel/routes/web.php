@@ -30,3 +30,13 @@ Route::get('/admin', fn() => Inertia::render('Admin'));
 Route::get('/movie/{id}', function ($id) {
     return Inertia::render('Movie');
 });
+
+Route::get('/session/{id}', function ($id) {
+    return Inertia::render('SessionSeats', [
+        'sessionId' => $id
+    ]);
+});
+
+Route::get('/my-bookings', function () {
+    return Inertia::render('MyBookings');
+});
