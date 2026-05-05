@@ -7,20 +7,25 @@ use App\Repositories\Interfaces\MovieRepositoryInterface;
 
 class MovieRepository implements MovieRepositoryInterface
 {
-    public function create(MovieDTO $dto)
+    public function create(array $data)
     {
-        return Movie::create([
-            'title' => $dto->title,
-            'original_title' => $dto->original_title,
-            'description' => $dto->description,
-            'poster_url' => $dto->poster_url,
-            'trailer_url' => $dto->trailer_url,
-            'genre' => $dto->genre,
-            'duration' => $dto->duration,
-            'age_rating' => $dto->age_rating,
-            'director' => $dto->director,
-            'actors' => $dto->actors,
-        ]);
+        return \App\Models\Movie::create($data);
+    }
+
+    public function findById(int $id)
+    {
+        return \App\Models\Movie::findOrFail($id);
+    }
+
+    public function update($movie, array $data)
+    {
+        $movie->update($data);
+        return $movie;
+    }
+
+    public function delete($movie)
+    {
+        return $movie->delete();
     }
 
     public function getAll(int $perPage)

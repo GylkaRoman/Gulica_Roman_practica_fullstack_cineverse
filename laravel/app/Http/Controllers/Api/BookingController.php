@@ -22,6 +22,13 @@ class BookingController extends Controller
             $request->user()->id,
         );
     }
+    public function adminIndex(Request $request)
+    {
+        return $this->service->adminIndex(
+            $request->query('status'),
+            $request->query('search')
+        );
+    }
 
     public function index(Request $request)
     {

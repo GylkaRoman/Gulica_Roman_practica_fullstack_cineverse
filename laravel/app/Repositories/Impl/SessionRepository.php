@@ -10,17 +10,25 @@ use Illuminate\Support\Facades\Session as FacadesSession;
 
 class SessionRepository implements SessionRepositoryInterface
 {
-    public function create(SessionDTO $dto)
+    public function create(array $data)
     {
-        return MovieSession::create([
-            'movie_id' => $dto->movie_id,
-            'hall_id' => $dto->hall_id,
-            'date' => $dto->date,
-            'time' => $dto->time,
-            'format' => $dto->format,
-            'language' => $dto->language,
-            'base_price' => $dto->base_price,
-        ]);
+        return MovieSession::create($data);
+    }
+
+    public function findById(int $id)
+    {
+        return MovieSession::findOrFail($id);
+    }
+
+    public function update($session, array $data)
+    {
+        $session->update($data);
+        return $session;
+    }
+
+    public function delete($session)
+    {
+        return $session->delete();
     }
 
     public function getAll(int $perPage, ?string $date = null)

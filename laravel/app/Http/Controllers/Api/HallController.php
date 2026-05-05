@@ -14,10 +14,20 @@ class HallController extends Controller
         private HallServiceInterface $service
     ) {}
 
-    public function store(StoreHallRequest $request) {
-        $dto = HallDTO::fromArray($request->validated());
+    public function store(Request $request)
+    {
+        return $this->service->create($request->all());
+    }
 
-        return $this->service->create($dto);
+    public function update(Request $request, $id)
+    {
+        return $this->service->update($id, $request->all());
+    }
+
+    public function destroy($id)
+    {
+        $this->service->delete($id);
+        return response()->json(['success' => true]);
     }
 
     public function index(Request $request)

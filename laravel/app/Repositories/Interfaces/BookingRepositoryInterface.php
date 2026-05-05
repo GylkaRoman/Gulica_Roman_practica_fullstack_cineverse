@@ -17,4 +17,6 @@ interface BookingRepositoryInterface
     public function findPendingForUser(int $id, int $userId);
 
     public function delete(Booking $booking);
+
+    public function getAllWithFilters(?string $status, ?string $search);
 }

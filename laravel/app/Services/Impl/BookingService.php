@@ -74,6 +74,11 @@ class BookingService implements BookingServiceInterface
         });
     }
 
+    public function adminIndex(?string $status, ?string $search)
+    {
+        return $this->repository->getAllWithFilters($status, $search);
+    }
+
     public function pay(int $bookingId, int $userId)
     {
         return DB::transaction(function () use ($bookingId, $userId) {

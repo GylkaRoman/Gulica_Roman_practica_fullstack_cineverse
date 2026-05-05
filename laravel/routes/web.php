@@ -25,7 +25,12 @@ Route::get('/rules', function () {
 Route::get('/login', fn() => Inertia::render('Login'));
 Route::get('/register', fn() => Inertia::render('Register'));
 Route::get('/profile', fn() => Inertia::render('Profile'));
+
 Route::get('/admin', fn() => Inertia::render('Admin'));
+Route::get('/admin/movies', fn() => Inertia::render('AdminMovies'));
+Route::get('/admin/halls', fn() => Inertia::render('AdminHalls'));
+Route::get('/admin/sessions', fn() => Inertia::render('AdminSessions'));
+Route::get('/admin/bookings', fn() => Inertia::render('AdminBookings'));
 
 Route::get('/movie/{id}', function ($id) {
     return Inertia::render('Movie');

@@ -7,13 +7,25 @@ use App\Repositories\Interfaces\HallRepositoryInterface;
 
 class HallRepository implements HallRepositoryInterface
 {
-    public function create(HallDTO $dto)
+    public function create(array $data)
     {
-        return Hall::create([
-            'name' => $dto->name,
-            'rows_count' => $dto->rows_count,
-            'seats_per_row' => $dto->seats_per_row,
-        ]);
+        return Hall::create($data);
+    }
+
+    public function findById(int $id)
+    {
+        return Hall::findOrFail($id);
+    }
+
+    public function update(Hall $hall, array $data)
+    {
+        $hall->update($data);
+        return $hall;
+    }
+
+    public function delete(Hall $hall)
+    {
+        return $hall->delete();
     }
 
     public function getAll(int $perPage)

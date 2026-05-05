@@ -36,6 +36,18 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::middleware(['auth:api', 'role:admin'])->group(function () {
+
     Route::post('/movies', [MovieController::class, 'store']);
+    Route::put('/movies/{id}', [MovieController::class, 'update']);
+    Route::delete('/movies/{id}', [MovieController::class, 'destroy']);
+
     Route::post('/halls', [HallController::class, 'store']);
+    Route::put('/halls/{id}', [HallController::class, 'update']);
+    Route::delete('/halls/{id}', [HallController::class, 'destroy']);
+
+    Route::post('/sessions', [SessionController::class, 'store']);
+    Route::put('/sessions/{id}', [SessionController::class, 'update']);
+    Route::delete('/sessions/{id}', [SessionController::class, 'destroy']);
+
+    Route::get('/admin/bookings', [BookingController::class, 'adminIndex']);
 });

@@ -13,4 +13,6 @@ interface BookingServiceInterface
     public function pay(int $bookingId, int $userId);
 
     public function destroy(int $id);
+
+    public function adminIndex(?string $status, ?string $search);
 }

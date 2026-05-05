@@ -13,6 +13,27 @@ class BookingRepository implements BookingRepositoryInterface
     {
         return Booking::create($data);
     }
+    public function getAllWithFilters(?string $status, ?string $search)
+    {
+        $query = Booking::with([
+            'user',
+            'session.movie',
+            'session.hall',
+            'seats'
+        ]);
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        if ($search) {
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'like', "%$search%");
+            });
+        }
+
+        return $query->latest()->get();
+    }
 
     public function getUserBookings(int $userId)
     {

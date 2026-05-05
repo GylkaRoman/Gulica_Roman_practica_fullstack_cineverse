@@ -11,9 +11,21 @@ class HallService implements HallServiceInterface
         private HallRepositoryInterface $repository
     ) {}
 
-    public function create(HallDTO $dto)
+    public function create(array $data)
     {
-        return $this->repository->create($dto);
+        return $this->repository->create($data);
+    }
+
+    public function update(int $id, array $data)
+    {
+        $hall = $this->repository->findById($id);
+        return $this->repository->update($hall, $data);
+    }
+
+    public function delete(int $id)
+    {
+        $hall = $this->repository->findById($id);
+        return $this->repository->delete($hall);
     }
 
     public function getAll(int $perPage)

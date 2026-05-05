@@ -13,9 +13,21 @@ class SessionService implements SessionServiceInterface
         private SessionRepositoryInterface $repository
     ) {}
 
-    public function create(SessionDTO $dto)
+    public function create(array $data)
     {
-        return $this->repository->create($dto);
+        return $this->repository->create($data);
+    }
+
+    public function update(int $id, array $data)
+    {
+        $session = $this->repository->findById($id);
+        return $this->repository->update($session, $data);
+    }
+
+    public function delete(int $id)
+    {
+        $session = $this->repository->findById($id);
+        return $this->repository->delete($session);
     }
 
     public function getAll(int $perPage, ?string $date = null)

@@ -58,7 +58,7 @@ onMounted(async () => {
             <p>Name: {{ user?.name }}</p>
             <p>Email: {{ user?.email }}</p>
 
-            <button @click="router.visit('/my-bookings')" class="mt-6 bg-blue-500 px-4 py-2 rounded">
+            <button @click="router.visit('/my-bookings')" class="mt-6 bg-primary text-black px-4 py-2 mr-5 rounded">
                 My Bookings
             </button>
 

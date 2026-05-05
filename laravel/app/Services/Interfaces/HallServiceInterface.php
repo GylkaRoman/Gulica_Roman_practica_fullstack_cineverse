@@ -5,7 +5,10 @@ use App\DTO\HallDTO;
 
 interface HallServiceInterface
 {
-    public function create(HallDTO $dto);
 
     public function getAll(int $perPage);
+
+    public function create(array $data);
+    public function update(int $id, array $data);
+    public function delete(int $id);
 }
