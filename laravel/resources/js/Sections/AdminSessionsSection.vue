@@ -7,6 +7,8 @@ const movies = ref([])
 const halls = ref([])
 
 const editingId = ref(null)
+const errors = ref({})
+
 const token = localStorage.getItem('token')
 
 const form = ref({
@@ -33,23 +35,22 @@ const fetchData = async () => {
 
 onMounted(fetchData)
 
+
 const saveSession = async () => {
+    errors.value = {}
+
     try {
         if (editingId.value) {
             await axios.put(
                 `/api/sessions/${editingId.value}`,
                 form.value,
-                {
-                    headers: { Authorization: `Bearer ${token}` }
-                }
+                { headers: { Authorization: `Bearer ${token}` } }
             )
         } else {
             await axios.post(
                 '/api/sessions',
                 form.value,
-                {
-                    headers: { Authorization: `Bearer ${token}` }
-                }
+                { headers: { Authorization: `Bearer ${token}` } }
             )
         }
 
@@ -57,9 +58,20 @@ const saveSession = async () => {
         fetchData()
 
     } catch (e) {
-        console.log('SESSION ERROR:', e.response?.data)
+        const status = e.response?.status
+
+        if (status === 422) {
+            errors.value = e.response.data.errors
+        } else if (status === 401) {
+            alert('Unauthorized')
+        } else if (status === 403) {
+            alert('Forbidden (no access)')
+        } else {
+            console.log(e.response?.data)
+        }
     }
 }
+
 
 const editSession = (s) => {
     editingId.value = s.id
@@ -83,8 +95,10 @@ const deleteSession = async (id) => {
     fetchData()
 }
 
+
 const resetForm = () => {
     editingId.value = null
+    errors.value = {}
 
     form.value = {
         movie_id: '',
@@ -96,6 +110,8 @@ const resetForm = () => {
         base_price: 100
     }
 }
+
+const err = (field) => errors.value[field]?.[0]
 </script>
 
 <template>
@@ -109,51 +125,73 @@ const resetForm = () => {
 
             <div class="grid grid-cols-2 gap-3 mb-6">
 
-                <select v-model="form.movie_id"
-                    class="w-full p-3 bg-gray-800 rounded-lg text-white outline-none focus:ring-2 focus:ring-primary">
-                    <option disabled value="">Select movie</option>
-                    <option v-for="m in movies" :key="m.id" :value="m.id">
-                        {{ m.title }}
-                    </option>
-                </select>
+                <div>
+                    <select v-model="form.movie_id" class="w-full p-3 bg-gray-800 rounded-lg">
+                        <option disabled value="">Select movie</option>
+                        <option v-for="m in movies" :key="m.id" :value="m.id">
+                            {{ m.title }}
+                        </option>
+                    </select>
+                    <p v-if="err('movie_id')" class="text-red-500 text-sm">
+                        {{ err('movie_id') }}
+                    </p>
+                </div>
 
-                <select v-model="form.hall_id"
-                    class="w-full p-3 bg-gray-800 rounded-lg text-white outline-none focus:ring-2 focus:ring-primary">
-                    <option disabled value="">Select hall</option>
-                    <option v-for="h in halls" :key="h.id" :value="h.id">
-                        {{ h.name }}
-                    </option>
-                </select>
+                <div>
+                    <select v-model="form.hall_id" class="w-full p-3 bg-gray-800 rounded-lg">
+                        <option disabled value="">Select hall</option>
+                        <option v-for="h in halls" :key="h.id" :value="h.id">
+                            {{ h.name }}
+                        </option>
+                    </select>
+                    <p v-if="err('hall_id')" class="text-red-500 text-sm">
+                        {{ err('hall_id') }}
+                    </p>
+                </div>
 
-                <input v-model="form.date" type="date"
-                    class="w-full p-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary" />
+                <div>
+                    <input v-model="form.date" type="date" class="w-full p-3 bg-gray-800 rounded-lg" />
+                    <p v-if="err('date')" class="text-red-500 text-sm">
+                        {{ err('date') }}
+                    </p>
+                </div>
 
-                <input v-model="form.time" type="time"
-                    class="w-full p-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary" />
+                <div>
+                    <input v-model="form.time" type="time" class="w-full p-3 bg-gray-800 rounded-lg" />
+                    <p v-if="err('time')" class="text-red-500 text-sm">
+                        {{ err('time') }}
+                    </p>
+                </div>
 
-                <select v-model="form.format" class="w-full p-3 bg-gray-800 rounded-lg text-white">
-                    <option value="2D">2D</option>
-                    <option value="3D">3D</option>
-                </select>
+                <div>
+                    <select v-model="form.format" class="w-full p-3 bg-gray-800 rounded-lg">
+                        <option value="2D">2D</option>
+                        <option value="3D">3D</option>
+                    </select>
+                </div>
 
-                <select v-model="form.language" class="w-full p-3 bg-gray-800 rounded-lg text-white">
-                    <option value="en">EN</option>
-                    <option value="ru">RU</option>
-                    <option value="ro">RO</option>
-                </select>
+                <div>
+                    <select v-model="form.language" class="w-full p-3 bg-gray-800 rounded-lg">
+                        <option value="en">EN</option>
+                        <option value="ru">RU</option>
+                        <option value="ro">RO</option>
+                    </select>
+                </div>
 
-                <input v-model="form.base_price" type="number"
-                    class="w-full p-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary col-span-2" />
+                <div class="col-span-2">
+                    <input v-model="form.base_price" type="number" class="w-full p-3 bg-gray-800 rounded-lg" />
+                    <p v-if="err('base_price')" class="text-red-500 text-sm">
+                        {{ err('base_price') }}
+                    </p>
+                </div>
 
             </div>
 
-            <button @click="saveSession"
-                class="w-full bg-primary text-black font-bold py-3 rounded-lg hover:opacity-80 transition mb-6">
+            <button @click="saveSession" class="w-full bg-primary text-black font-bold py-3 rounded-lg mb-6">
                 {{ editingId ? 'Update Session' : 'Create Session' }}
             </button>
 
-            <div v-for="s in sessions" :key="s.id"
-                class="bg-gray-800 p-4 mb-3 rounded-lg flex justify-between items-center">
+            <div v-for="s in sessions" :key="s.id" class="bg-gray-800 p-4 mb-3 rounded-lg flex justify-between">
 
                 <div>
                     <p class="font-bold text-primary">

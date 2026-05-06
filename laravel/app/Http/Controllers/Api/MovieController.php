@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMovieRequest;
 use App\DTO\MovieDTO;
+use App\Http\Requests\UpdateMovieRequest;
 use App\Services\Interfaces\MovieServiceInterface;
 use Illuminate\Http\Request;
 
@@ -14,15 +15,16 @@ class MovieController extends Controller
         private MovieServiceInterface $service
     ) {}
 
-    public function store(Request $request)
+    public function store(StoreMovieRequest $request)
     {
-        return $this->service->create($request->all());
+        return $this->service->create($request->validated());
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateMovieRequest $request, $id)
     {
-        return $this->service->update($id, $request->all());
+        return $this->service->update($id, $request->validated());
     }
+
 
     public function destroy($id)
     {
@@ -38,6 +40,6 @@ class MovieController extends Controller
 
     public function show(int $id)
     {
-        return $this->service->getById($id);       
+        return $this->service->getById($id);
     }
 }

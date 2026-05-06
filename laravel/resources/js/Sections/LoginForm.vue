@@ -2,40 +2,62 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import { router } from '@inertiajs/vue3'
-import { useAuth } from '@/Composables/useAuth'
-
-const { setUser } = useAuth()
 
 const form = ref({
     email: '',
     password: ''
 })
 
+const errors = ref(null)
+const loading = ref(false)
+
 const login = async () => {
-    const res = await axios.post('/api/auth/login', form.value)
+    errors.value = null
+    loading.value = true
 
-    const token = res.data.access_token
+    try {
+        const res = await axios.post('/api/auth/login', form.value)
 
-    localStorage.setItem('token', token)
+        const token = res.data.access_token
+        localStorage.setItem('token', token)
 
-    const profile = await axios.get('/api/profile', {
-        headers: {
-            Authorization: `Bearer ${token}`
+        const profile = await axios.get('/api/profile', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+        const user = profile.data.user ?? profile.data
+        localStorage.setItem('user', JSON.stringify(user))
+
+        if (user.role === 'admin') {
+            router.visit('/admin')
+        } else {
+            router.visit('/profile')
         }
-    })
 
-    const user = profile.data.user ?? profile.data
+    } catch (err) {
 
-    localStorage.setItem('user', JSON.stringify(user))
+        if (err.response?.status === 422) {
+            errors.value = err.response.data.errors
+        }
 
-    if (user.role === 'admin') {
-        router.visit('/admin')
-    } else {
-        router.visit('/profile')
+        else if (err.response?.status === 401) {
+            errors.value = {
+                general: ['Invalid email or password']
+            }
+        }
+
+        else {
+            errors.value = {
+                general: ['Something went wrong']
+            }
+        }
     }
+
+    loading.value = false
 }
 </script>
-
 <template>
     <div class="min-h-screen flex items-center justify-center text-white">
 
@@ -45,15 +67,28 @@ const login = async () => {
                 Login
             </h1>
 
+            <p v-if="errors?.general" class="text-red-500 mb-3 text-center">
+                {{ errors.general[0] }}
+            </p>
+
             <input v-model="form.email" placeholder="Email"
-                class="w-full p-3 mb-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary" />
+                class="w-full p-3 mb-1 bg-gray-800 rounded-lg outline-none" />
+
+            <p v-if="errors?.email" class="text-red-500 text-sm mb-2">
+                {{ errors.email[0] }}
+            </p>
 
             <input v-model="form.password" type="password" placeholder="Password"
-                class="w-full p-3 mb-5 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary" />
+                class="w-full p-3 mb-1 bg-gray-800 rounded-lg outline-none" />
+
+            <p v-if="errors?.password" class="text-red-500 text-sm mb-4">
+                {{ errors.password[0] }}
+            </p>
 
             <button @click="login"
-                class="w-full bg-primary text-black font-bold py-3 rounded-lg hover:opacity-80 transition">
-                Login
+                class="w-full bg-primary text-black font-bold py-3 rounded-lg hover:opacity-80 transition"
+                :disabled="loading">
+                {{ loading ? 'Loading...' : 'Login' }}
             </button>
 
         </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\DTO\HallDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreHallRequest;
+use App\Http\Requests\UpdateHallRequest;
 use App\Services\Interfaces\HallServiceInterface;
 use Illuminate\Http\Request;
 
@@ -14,14 +15,14 @@ class HallController extends Controller
         private HallServiceInterface $service
     ) {}
 
-    public function store(Request $request)
+    public function store(StoreHallRequest $request)
     {
-        return $this->service->create($request->all());
+        return $this->service->create($request->validated());
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateHallRequest $request, $id)
     {
-        return $this->service->update($id, $request->all());
+        return $this->service->update($id, $request->validated());
     }
 
     public function destroy($id)

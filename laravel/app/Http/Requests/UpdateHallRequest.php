@@ -12,7 +12,7 @@ class UpdateHallRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,9 +23,9 @@ class UpdateHallRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|string',
-            'rows_count' => 'sometimes|integer|min:1',
-            'seats_per_row' => 'sometimes|integer|min:1',
+            'name' => ['required', 'string', 'min:3', 'max:50'],
+            'rows_count' => ['required', 'integer', 'min:4'],
+            'seats_per_row' => ['required', 'integer', 'min:4'],
         ];
     }
 }

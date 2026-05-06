@@ -4,6 +4,7 @@ import axios from 'axios'
 
 const movies = ref([])
 const editingId = ref(null)
+const errors = ref({})
 
 const token = localStorage.getItem('token')
 
@@ -20,33 +21,12 @@ const form = ref({
     actors: ''
 })
 
-const startEdit = (movie) => {
-    editingId.value = movie.id
+const hasError = (field) => !!errors.value[field]
 
-    form.value = {
-        title: movie.title,
-        original_title: movie.original_title,
-        description: movie.description,
-        poster_url: movie.poster_url,
-        trailer_url: movie.trailer_url,
-        genre: movie.genre,
-        duration: movie.duration,
-        age_rating: movie.age_rating,
-        director: movie.director,
-        actors: movie.actors
+const clearError = (field) => {
+    if (errors.value[field]) {
+        delete errors.value[field]
     }
-}
-
-const updateMovie = async () => {
-    await axios.put(`/api/movies/${editingId.value}`, form.value, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
-
-    resetForm()
-    editingId.value = null
-    fetchMovies()
 }
 
 const fetchMovies = async () => {
@@ -57,24 +37,60 @@ const fetchMovies = async () => {
 onMounted(fetchMovies)
 
 const createMovie = async () => {
-    await axios.post('/api/movies', form.value, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
+    errors.value = {}
 
-    resetForm()
-    fetchMovies()
+    try {
+        await axios.post('/api/movies', form.value, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+
+        resetForm()
+        fetchMovies()
+
+    } catch (e) {
+        if (e.response?.status === 422) {
+            errors.value = e.response.data.errors
+        } else if (e.response?.status === 401) {
+            alert('Unauthorized')
+        } else {
+            console.log(e.response?.data)
+        }
+    }
+}
+
+const updateMovie = async () => {
+    errors.value = {}
+
+    try {
+        await axios.put(`/api/movies/${editingId.value}`, form.value, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+
+        resetForm()
+        editingId.value = null
+        fetchMovies()
+
+    } catch (e) {
+        if (e.response?.status === 422) {
+            errors.value = e.response.data.errors
+        } else {
+            console.log(e.response?.data)
+        }
+    }
 }
 
 const deleteMovie = async (id) => {
     await axios.delete(`/api/movies/${id}`, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
+        headers: { Authorization: `Bearer ${token}` }
     })
 
     fetchMovies()
+}
+
+const startEdit = (movie) => {
+    editingId.value = movie.id
+
+    form.value = { ...movie }
 }
 
 const resetForm = () => {
@@ -90,8 +106,11 @@ const resetForm = () => {
         director: '',
         actors: ''
     }
+
+    errors.value = {}
 }
 </script>
+
 <template>
     <div class="min-h-screen flex items-center justify-center text-white">
 
@@ -101,37 +120,67 @@ const resetForm = () => {
                 Movies Admin
             </h1>
 
-            <div class="grid grid-cols-2 gap-3 mb-6">
+            <div class="grid grid-cols-2 gap-4 mb-6">
 
-                <input v-model="form.title" placeholder="Title"
-                    class="w-full p-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary" />
+                <div>
+                    <input v-model="form.title" @input="clearError('title')" placeholder="Title"
+                        :class="inputClass('title')" />
+                    <p v-if="errors.title" class="error">{{ errors.title[0] }}</p>
+                </div>
 
-                <input v-model="form.original_title" placeholder="Original Title"
-                    class="w-full p-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary" />
+                <div>
+                    <input v-model="form.original_title" @input="clearError('original_title')"
+                        placeholder="Original Title" :class="inputClass('original_title')" />
+                    <p v-if="errors.original_title" class="error">{{ errors.original_title[0] }}</p>
+                </div>
 
-                <input v-model="form.genre" placeholder="Genre"
-                    class="w-full p-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary" />
+                <div>
+                    <input v-model="form.genre" @input="clearError('genre')" placeholder="Genre"
+                        :class="inputClass('genre')" />
+                    <p v-if="errors.genre" class="error">{{ errors.genre[0] }}</p>
+                </div>
 
-                <input v-model="form.duration" placeholder="Duration"
-                    class="w-full p-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary" />
+                <div>
+                    <input v-model="form.duration" @input="clearError('duration')" placeholder="Duration"
+                        :class="inputClass('duration')" />
+                    <p v-if="errors.duration" class="error">{{ errors.duration[0] }}</p>
+                </div>
 
-                <input v-model="form.age_rating" placeholder="Age rating"
-                    class="w-full p-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary" />
+                <div>
+                    <input v-model="form.age_rating" @input="clearError('age_rating')" placeholder="Age rating"
+                        :class="inputClass('age_rating')" />
+                    <p v-if="errors.age_rating" class="error">{{ errors.age_rating[0] }}</p>
+                </div>
 
-                <input v-model="form.director" placeholder="Director"
-                    class="w-full p-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary" />
+                <div>
+                    <input v-model="form.director" @input="clearError('director')" placeholder="Director"
+                        :class="inputClass('director')" />
+                    <p v-if="errors.director" class="error">{{ errors.director[0] }}</p>
+                </div>
 
-                <input v-model="form.poster_url" placeholder="Poster URL"
-                    class="w-full p-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary col-span-2" />
+                <div class="col-span-2">
+                    <input v-model="form.poster_url" @input="clearError('poster_url')" placeholder="Poster URL"
+                        :class="inputClass('poster_url')" />
+                    <p v-if="errors.poster_url" class="error">{{ errors.poster_url[0] }}</p>
+                </div>
 
-                <input v-model="form.trailer_url" placeholder="Trailer URL"
-                    class="w-full p-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary col-span-2" />
+                <div class="col-span-2">
+                    <input v-model="form.trailer_url" @input="clearError('trailer_url')" placeholder="Trailer URL"
+                        :class="inputClass('trailer_url')" />
+                    <p v-if="errors.trailer_url" class="error">{{ errors.trailer_url[0] }}</p>
+                </div>
 
-                <textarea v-model="form.description" placeholder="Description"
-                    class="w-full p-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary col-span-2"></textarea>
+                <div class="col-span-2">
+                    <textarea v-model="form.description" @input="clearError('description')" placeholder="Description"
+                        :class="inputClass('description')" />
+                    <p v-if="errors.description" class="error">{{ errors.description[0] }}</p>
+                </div>
 
-                <textarea v-model="form.actors" placeholder="Actors"
-                    class="w-full p-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary col-span-2"></textarea>
+                <div class="col-span-2">
+                    <textarea v-model="form.actors" @input="clearError('actors')" placeholder="Actors"
+                        :class="inputClass('actors')" />
+                    <p v-if="errors.actors" class="error">{{ errors.actors[0] }}</p>
+                </div>
 
             </div>
 
@@ -151,15 +200,12 @@ const resetForm = () => {
                 </div>
 
                 <div class="flex gap-2">
-
                     <button @click="startEdit(m)" class="bg-green-500 px-3 py-1 rounded text-black">
                         Edit
                     </button>
-
                     <button @click="deleteMovie(m.id)" class="bg-red-500 px-3 py-1 rounded text-black">
                         Delete
                     </button>
-
                 </div>
 
             </div>
@@ -168,3 +214,26 @@ const resetForm = () => {
 
     </div>
 </template>
+
+<script>
+export default {
+    methods: {
+        inputClass(field) {
+            return [
+                'w-full p-3 rounded-lg outline-none',
+                this.errors?.[field]
+                    ? 'bg-gray-800 border border-red-500'
+                    : 'bg-gray-800 focus:ring-2 focus:ring-primary'
+            ]
+        }
+    }
+}
+</script>
+
+<style>
+.error {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 4px;
+}
+</style>

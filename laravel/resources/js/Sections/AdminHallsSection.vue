@@ -3,6 +3,9 @@ import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
 const halls = ref([])
+const editingId = ref(null)
+const errors = ref({})
+
 const token = localStorage.getItem('token')
 
 const form = ref({
@@ -11,7 +14,13 @@ const form = ref({
     seats_per_row: 5
 })
 
-const editingId = ref(null)
+const hasError = (field) => !!errors.value[field]
+
+const clearError = (field) => {
+    if (errors.value[field]) {
+        delete errors.value[field]
+    }
+}
 
 const fetchHalls = async () => {
     const res = await axios.get('/api/halls')
@@ -21,18 +30,31 @@ const fetchHalls = async () => {
 onMounted(fetchHalls)
 
 const saveHall = async () => {
-    if (editingId.value) {
-        await axios.put(`/api/halls/${editingId.value}`, form.value, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-    } else {
-        await axios.post('/api/halls', form.value, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-    }
+    errors.value = {}
 
-    resetForm()
-    fetchHalls()
+    try {
+        if (editingId.value) {
+            await axios.put(`/api/halls/${editingId.value}`, form.value, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+        } else {
+            await axios.post('/api/halls', form.value, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+        }
+
+        resetForm()
+        fetchHalls()
+
+    } catch (e) {
+        if (e.response?.status === 422) {
+            errors.value = e.response.data.errors
+        } else if (e.response?.status === 401) {
+            alert('Unauthorized')
+        } else {
+            console.log(e.response?.data)
+        }
+    }
 }
 
 const editHall = (hall) => {
@@ -55,6 +77,8 @@ const deleteHall = async (id) => {
 
 const resetForm = () => {
     editingId.value = null
+    errors.value = {}
+
     form.value = {
         name: '',
         rows_count: 5,
@@ -72,16 +96,45 @@ const resetForm = () => {
                 Admin Halls
             </h1>
 
-            <div class="grid grid-cols-1 gap-3 mb-6">
+            <div class="grid grid-cols-1 gap-4 mb-6">
 
-                <input v-model="form.name" placeholder="Hall name"
-                    class="w-full p-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary" />
+                <div>
+                    <input v-model="form.name" @input="clearError('name')" placeholder="Hall name" :class="[
+                        'w-full p-3 rounded-lg outline-none',
+                        hasError('name')
+                            ? 'bg-gray-800 border border-red-500'
+                            : 'bg-gray-800 focus:ring-2 focus:ring-primary'
+                    ]" />
+                    <p v-if="errors.name" class="text-red-500 text-sm mt-1">
+                        {{ errors.name[0] }}
+                    </p>
+                </div>
 
-                <input v-model="form.rows_count" type="number" placeholder="Rows"
-                    class="w-full p-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary" />
+                <div>
+                    <input v-model="form.rows_count" @input="clearError('rows_count')" type="number" placeholder="Rows"
+                        :class="[
+                            'w-full p-3 rounded-lg outline-none',
+                            hasError('rows_count')
+                                ? 'bg-gray-800 border border-red-500'
+                                : 'bg-gray-800 focus:ring-2 focus:ring-primary'
+                        ]" />
+                    <p v-if="errors.rows_count" class="text-red-500 text-sm mt-1">
+                        {{ errors.rows_count[0] }}
+                    </p>
+                </div>
 
-                <input v-model="form.seats_per_row" type="number" placeholder="Seats per row"
-                    class="w-full p-3 bg-gray-800 rounded-lg outline-none focus:ring-2 focus:ring-primary" />
+                <div>
+                    <input v-model="form.seats_per_row" @input="clearError('seats_per_row')" type="number"
+                        placeholder="Seats per row" :class="[
+                            'w-full p-3 rounded-lg outline-none',
+                            hasError('seats_per_row')
+                                ? 'bg-gray-800 border border-red-500'
+                                : 'bg-gray-800 focus:ring-2 focus:ring-primary'
+                        ]" />
+                    <p v-if="errors.seats_per_row" class="text-red-500 text-sm mt-1">
+                        {{ errors.seats_per_row[0] }}
+                    </p>
+                </div>
 
             </div>
 

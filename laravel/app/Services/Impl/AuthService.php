@@ -36,7 +36,9 @@ class AuthService implements AuthServiceInterface
     public function login(array $data)
     {
         if (!$token = $this->auth->attempt($data)) {
-            throw new \Exception('Unauthorized');
+            return response()->json([
+                'message' => 'Invalid email or password'
+            ], 401);
         }
 
         $user = auth('api')->user();
@@ -65,8 +67,11 @@ class AuthService implements AuthServiceInterface
             ->where('expires_at', '>', now())
             ->first();
 
+
         if (!$refresh) {
-            throw new \Exception('Invalid refresh token');
+            return response()->json([
+                'message' => 'Invalid refresh token'
+            ], 401);
         }
 
         $user = User::find($refresh->user_id);;
@@ -96,6 +101,5 @@ class AuthService implements AuthServiceInterface
         $this->auth->logout();
 
         return response()->json(['message' => 'Logged out']);
-    
     }
 }
