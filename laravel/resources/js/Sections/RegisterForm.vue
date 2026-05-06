@@ -36,11 +36,11 @@ const register = async () => {
 
             <h1 class="text-3xl mb-6 text-primary text-center">Register</h1>
 
-            <input v-model="form.name" placeholder="Name" class="w-full p-3 mb-3 bg-gray-800 rounded" />
-            <input v-model="form.email" placeholder="Email" class="w-full p-3 mb-3 bg-gray-800 rounded" />
-            <input v-model="form.password" type="password" placeholder="Password"
+            <input v-model="form.name" placeholder="Name" class="w-full p-3 mb-3 bg-gray-800 rounded"  required/>
+            <input v-model="form.email" placeholder="Email" class="w-full p-3 mb-3 bg-gray-800 rounded"  required/>
+            <input v-model="form.password" type="password" placeholder="Password" required
                 class="w-full p-3 mb-3 bg-gray-800 rounded" />
-            <input v-model="form.password_confirmation" type="password" placeholder="Confirm"
+            <input v-model="form.password_confirmation" type="password" placeholder="Confirm" required
                 class="w-full p-3 mb-5 bg-gray-800 rounded" />
 
             <button @click="register" class="w-full bg-primary text-black py-3 rounded">

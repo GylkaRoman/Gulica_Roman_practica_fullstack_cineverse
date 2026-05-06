@@ -126,7 +126,7 @@ const err = (field) => errors.value[field]?.[0]
             <div class="grid grid-cols-2 gap-3 mb-6">
 
                 <div>
-                    <select v-model="form.movie_id" class="w-full p-3 bg-gray-800 rounded-lg">
+                    <select v-model="form.movie_id" class="w-full p-3 bg-gray-800 rounded-lg" required>
                         <option disabled value="">Select movie</option>
                         <option v-for="m in movies" :key="m.id" :value="m.id">
                             {{ m.title }}
@@ -138,7 +138,7 @@ const err = (field) => errors.value[field]?.[0]
                 </div>
 
                 <div>
-                    <select v-model="form.hall_id" class="w-full p-3 bg-gray-800 rounded-lg">
+                    <select v-model="form.hall_id" class="w-full p-3 bg-gray-800 rounded-lg" required>
                         <option disabled value="">Select hall</option>
                         <option v-for="h in halls" :key="h.id" :value="h.id">
                             {{ h.name }}
@@ -150,28 +150,28 @@ const err = (field) => errors.value[field]?.[0]
                 </div>
 
                 <div>
-                    <input v-model="form.date" type="date" class="w-full p-3 bg-gray-800 rounded-lg" />
+                    <input v-model="form.date" type="date" class="w-full p-3 bg-gray-800 rounded-lg"  required/>
                     <p v-if="err('date')" class="text-red-500 text-sm">
                         {{ err('date') }}
                     </p>
                 </div>
 
                 <div>
-                    <input v-model="form.time" type="time" class="w-full p-3 bg-gray-800 rounded-lg" />
+                    <input v-model="form.time" type="time" class="w-full p-3 bg-gray-800 rounded-lg"  required/>
                     <p v-if="err('time')" class="text-red-500 text-sm">
                         {{ err('time') }}
                     </p>
                 </div>
 
                 <div>
-                    <select v-model="form.format" class="w-full p-3 bg-gray-800 rounded-lg">
+                    <select v-model="form.format" class="w-full p-3 bg-gray-800 rounded-lg required">
                         <option value="2D">2D</option>
                         <option value="3D">3D</option>
                     </select>
                 </div>
 
                 <div>
-                    <select v-model="form.language" class="w-full p-3 bg-gray-800 rounded-lg">
+                    <select v-model="form.language" class="w-full p-3 bg-gray-800 rounded-lg required">
                         <option value="en">EN</option>
                         <option value="ru">RU</option>
                         <option value="ro">RO</option>
@@ -179,7 +179,7 @@ const err = (field) => errors.value[field]?.[0]
                 </div>
 
                 <div class="col-span-2">
-                    <input v-model="form.base_price" type="number" class="w-full p-3 bg-gray-800 rounded-lg" />
+                    <input v-model="form.base_price" type="number" class="w-full p-3 bg-gray-800 rounded-lg required" />
                     <p v-if="err('base_price')" class="text-red-500 text-sm">
                         {{ err('base_price') }}
                     </p>

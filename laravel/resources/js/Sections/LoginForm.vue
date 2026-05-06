@@ -71,14 +71,14 @@ const login = async () => {
                 {{ errors.general[0] }}
             </p>
 
-            <input v-model="form.email" placeholder="Email"
+            <input v-model="form.email" placeholder="Email" required
                 class="w-full p-3 mb-1 bg-gray-800 rounded-lg outline-none" />
 
             <p v-if="errors?.email" class="text-red-500 text-sm mb-2">
                 {{ errors.email[0] }}
             </p>
 
-            <input v-model="form.password" type="password" placeholder="Password"
+            <input v-model="form.password" type="password" placeholder="Password" required
                 class="w-full p-3 mb-1 bg-gray-800 rounded-lg outline-none" />
 
             <p v-if="errors?.password" class="text-red-500 text-sm mb-4">

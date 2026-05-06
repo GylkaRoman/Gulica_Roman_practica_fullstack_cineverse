@@ -99,7 +99,7 @@ const resetForm = () => {
             <div class="grid grid-cols-1 gap-4 mb-6">
 
                 <div>
-                    <input v-model="form.name" @input="clearError('name')" placeholder="Hall name" :class="[
+                    <input v-model="form.name" @input="clearError('name')" placeholder="Hall name" required :class="[
                         'w-full p-3 rounded-lg outline-none',
                         hasError('name')
                             ? 'bg-gray-800 border border-red-500'
@@ -111,7 +111,7 @@ const resetForm = () => {
                 </div>
 
                 <div>
-                    <input v-model="form.rows_count" @input="clearError('rows_count')" type="number" placeholder="Rows"
+                    <input v-model="form.rows_count" @input="clearError('rows_count')" type="number" required placeholder="Rows"
                         :class="[
                             'w-full p-3 rounded-lg outline-none',
                             hasError('rows_count')
@@ -124,7 +124,7 @@ const resetForm = () => {
                 </div>
 
                 <div>
-                    <input v-model="form.seats_per_row" @input="clearError('seats_per_row')" type="number"
+                    <input v-model="form.seats_per_row" @input="clearError('seats_per_row')" type="number" required
                         placeholder="Seats per row" :class="[
                             'w-full p-3 rounded-lg outline-none',
                             hasError('seats_per_row')

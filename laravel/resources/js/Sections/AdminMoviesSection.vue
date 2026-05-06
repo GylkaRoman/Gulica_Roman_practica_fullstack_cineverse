@@ -123,7 +123,7 @@ const resetForm = () => {
             <div class="grid grid-cols-2 gap-4 mb-6">
 
                 <div>
-                    <input v-model="form.title" @input="clearError('title')" placeholder="Title"
+                    <input v-model="form.title" @input="clearError('title')" placeholder="Title" required
                         :class="inputClass('title')" />
                     <p v-if="errors.title" class="error">{{ errors.title[0] }}</p>
                 </div>
@@ -135,49 +135,49 @@ const resetForm = () => {
                 </div>
 
                 <div>
-                    <input v-model="form.genre" @input="clearError('genre')" placeholder="Genre"
+                    <input v-model="form.genre" @input="clearError('genre')" placeholder="Genre" required
                         :class="inputClass('genre')" />
                     <p v-if="errors.genre" class="error">{{ errors.genre[0] }}</p>
                 </div>
 
                 <div>
-                    <input v-model="form.duration" @input="clearError('duration')" placeholder="Duration"
+                    <input v-model="form.duration" @input="clearError('duration')" placeholder="Duration" required
                         :class="inputClass('duration')" />
                     <p v-if="errors.duration" class="error">{{ errors.duration[0] }}</p>
                 </div>
 
                 <div>
-                    <input v-model="form.age_rating" @input="clearError('age_rating')" placeholder="Age rating"
+                    <input v-model="form.age_rating" @input="clearError('age_rating')" placeholder="Age rating" required
                         :class="inputClass('age_rating')" />
                     <p v-if="errors.age_rating" class="error">{{ errors.age_rating[0] }}</p>
                 </div>
 
                 <div>
-                    <input v-model="form.director" @input="clearError('director')" placeholder="Director"
+                    <input v-model="form.director" @input="clearError('director')" placeholder="Director" required
                         :class="inputClass('director')" />
                     <p v-if="errors.director" class="error">{{ errors.director[0] }}</p>
                 </div>
 
                 <div class="col-span-2">
-                    <input v-model="form.poster_url" @input="clearError('poster_url')" placeholder="Poster URL"
+                    <input v-model="form.poster_url" @input="clearError('poster_url')" placeholder="Poster URL" required
                         :class="inputClass('poster_url')" />
                     <p v-if="errors.poster_url" class="error">{{ errors.poster_url[0] }}</p>
                 </div>
 
                 <div class="col-span-2">
-                    <input v-model="form.trailer_url" @input="clearError('trailer_url')" placeholder="Trailer URL"
+                    <input v-model="form.trailer_url" @input="clearError('trailer_url')" placeholder="Trailer URL" required
                         :class="inputClass('trailer_url')" />
                     <p v-if="errors.trailer_url" class="error">{{ errors.trailer_url[0] }}</p>
                 </div>
 
                 <div class="col-span-2">
-                    <textarea v-model="form.description" @input="clearError('description')" placeholder="Description"
+                    <textarea v-model="form.description" @input="clearError('description')" placeholder="Description" required
                         :class="inputClass('description')" />
                     <p v-if="errors.description" class="error">{{ errors.description[0] }}</p>
                 </div>
 
                 <div class="col-span-2">
-                    <textarea v-model="form.actors" @input="clearError('actors')" placeholder="Actors"
+                    <textarea v-model="form.actors" @input="clearError('actors')" placeholder="Actors" required
                         :class="inputClass('actors')" />
                     <p v-if="errors.actors" class="error">{{ errors.actors[0] }}</p>
                 </div>
