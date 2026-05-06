@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth as FacadesJWTAuth;
+use PHPOpenSourceSaver\JWTAuth\JWTAuth;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -36,16 +38,24 @@ class HandleInertiaRequests extends Middleware
 
     public function share($request): array
     {
+        $user = null;
+
+        try {
+            if ($token = $request->bearerToken()) {
+                $user = FacadesJWTAuth::setToken($token)->authenticate();
+            }
+        } catch (\Exception $e) {
+            $user = null;
+        }
+
         return array_merge(parent::share($request), [
             'auth' => [
-                'user' => fn() => $request->user()
-                    ? [
-                        'id' => $request->user()->id,
-                        'name' => $request->user()->name,
-                        'email' => $request->user()->email,
-                        'role' => $request->user()->role,
-                    ]
-                    : null,
+                'user' => $user ? [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $user->role,
+                ] : null,
             ],
         ]);
     }
