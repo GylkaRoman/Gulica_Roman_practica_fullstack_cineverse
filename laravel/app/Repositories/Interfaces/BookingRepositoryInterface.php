@@ -7,11 +7,17 @@ use App\Models\Booking;
 interface BookingRepositoryInterface
 {
     public function create(array $data);
+
     public function getBookedSeatIds(int $sessionId, array $seatIds);
+
     public function getUserBookings(int $userId);
+
     public function findById(int $id);
+
     public function attachSeats($booking, array $seatIds);
+
     public function update($booking, array $data);
+
     public function findWithRelations(int $id);
 
     public function findPendingForUser(int $id, int $userId);
@@ -19,4 +25,6 @@ interface BookingRepositoryInterface
     public function delete(Booking $booking);
 
     public function getAllWithFilters(?string $status, ?string $search);
+
+    public function markSeatsAsBooked(int $sessionId, array $seatIds);
 }

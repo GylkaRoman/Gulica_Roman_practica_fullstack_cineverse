@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class BookingService implements BookingServiceInterface
 {
-
     public function __construct(
         private BookingRepositoryInterface $repository
     ) {}
@@ -37,10 +36,8 @@ class BookingService implements BookingServiceInterface
 
             $this->repository->attachSeats($booking, $data['seat_ids']);
 
-            $pricePerSeat = 100;
-
             $this->repository->update($booking, [
-                'total_price' => count($data['seat_ids']) * $pricePerSeat,
+                'total_price' => count($data['seat_ids']) * 100,
             ]);
 
             return $this->repository->findWithRelations($booking->id);
@@ -49,27 +46,7 @@ class BookingService implements BookingServiceInterface
 
     public function getUserBookings(int $userId)
     {
-        $bookings = $this->repository->getUserBookings($userId);
-
-        return $bookings->map(function ($booking) {
-            return [
-                'id' => $booking->id,
-                'movie' => $booking->session->movie->title,
-                'date' => $booking->session->date,
-                'time' => $booking->session->time,
-                'hall' => $booking->session->hall->name,
-
-                'seats' => $booking->seats->map(function ($seat) {
-                    return [
-                        'row' => $seat->row_number,
-                        'number' => $seat->seat_number,
-                    ];
-                }),
-
-                'total_price' => $booking->total_price,
-                'status' => $booking->status,
-            ];
-        });
+        return $this->repository->getUserBookings($userId);
     }
 
     public function adminIndex(?string $status, ?string $search)
@@ -83,7 +60,7 @@ class BookingService implements BookingServiceInterface
 
             $booking = $this->repository->findById($bookingId);
 
-            $user = \App\Models\User::find(auth('api')->id());
+            $user = \App\Models\User::find($userId);
 
             if ($booking->user_id !== $userId) {
                 throw new \Exception('Forbidden');
@@ -106,6 +83,7 @@ class BookingService implements BookingServiceInterface
             return $booking;
         });
     }
+
     public function destroy(int $id)
     {
         $booking = $this->repository->findPendingForUser($id, auth('api')->id());

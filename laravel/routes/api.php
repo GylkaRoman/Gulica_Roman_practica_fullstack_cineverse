@@ -31,6 +31,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user/bookings', [BookingController::class, 'index']);
     Route::post('/bookings/{id}/pay', [BookingController::class, 'pay']);
     Route::get('/profile', [AuthController::class, 'me']);
+    Route::put('/profile', [AuthController::class, 'update']);
 
     Route::delete('/bookings/{id}', [BookingController::class, 'destroy']);
 });

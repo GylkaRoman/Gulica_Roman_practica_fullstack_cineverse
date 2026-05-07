@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RefreshRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Services\Interfaces\AuthServiceInterface;
 
 class AuthController extends Controller
@@ -28,10 +29,17 @@ class AuthController extends Controller
     {
         return $this->service->refresh($request->validated('refresh_token'));
     }
-
     public function me()
     {
-        return $this->service->me();
+        return $this->service->me(auth('api')->id());
+    }
+
+    public function update(UpdateProfileRequest $request)
+    {
+        return $this->service->update(
+            auth('api')->id(),
+            $request->validated()
+        );
     }
 
     public function logout()

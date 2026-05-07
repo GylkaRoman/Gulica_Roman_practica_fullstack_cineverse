@@ -3,6 +3,12 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 
 const bookings = ref([]);
+const loadingId = ref(null);
+const errors = ref({});
+
+axios.defaults.validateStatus = (status) => {
+    return status < 500;
+};
 
 onMounted(async () => {
     const token = localStorage.getItem("token");
@@ -19,24 +25,49 @@ onMounted(async () => {
 const pay = async (id) => {
     const token = localStorage.getItem("token");
 
-    await axios.post(
-        `/api/bookings/${id}/pay`,
-        {},
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        },
-    );
+    errors.value[id] = null;
+    loadingId.value = id;
 
-    const booking = bookings.value.find((b) => b.id === id);
-    if (booking) booking.status = "paid";
+    try {
+        const res = await axios.post(
+            `/api/bookings/${id}/pay`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            },
+        );
+
+        if (res.status === 400) {
+            errors.value[id] = res.data.error;
+            return;
+        }
+
+        if (res.status === 200) {
+            const booking = bookings.value.find((b) => b.id === id);
+
+            if (booking) {
+                booking.status = "paid";
+            }
+
+            errors.value[id] = null;
+        }
+    } catch (err) {
+        errors.value[id] = err.response?.data?.error || "Payment failed";
+    } finally {
+        loadingId.value = null;
+    }
 };
 </script>
 
 <template>
     <div class="p-10 text-white">
-        <h1 class="text-2xl mb-6 text-primary">My Bookings</h1>
+        <div
+            class="flex gap-4 flex-wrap bg-gray-950 px-5 py-5 rounded-lg text-3xl font-orbitron text-primary mb-6"
+        >
+            My Bookings
+        </div>
 
         <div v-if="bookings.length === 0">No bookings yet</div>
 
@@ -48,10 +79,12 @@ const pay = async (id) => {
             <p>Movie: {{ b.movie }}</p>
             <p>Date: {{ b.date }} | {{ b.time }}</p>
             <p>Hall: {{ b.hall }}</p>
+
             <p>
                 Seats:
                 {{ b.seats.map((s) => s.row + "-" + s.number).join(", ") }}
             </p>
+
             <p>Total: {{ b.total_price }} MDL</p>
 
             <p class="mt-2">
@@ -67,12 +100,20 @@ const pay = async (id) => {
                 </span>
             </p>
 
+            <div
+                v-if="errors[b.id]"
+                class="mt-2 p-2 bg-red-900/40 text-red-400 rounded"
+            >
+                {{ errors[b.id] }}
+            </div>
+
             <button
                 v-if="b.status === 'pending'"
                 @click="pay(b.id)"
-                class="mt-3 bg-green-500 px-4 py-2 rounded"
+                class="mt-3 bg-green-500 px-4 py-2 rounded disabled:opacity-50"
+                :disabled="loadingId === b.id"
             >
-                Pay
+                {{ loadingId === b.id ? "Processing..." : "Pay" }}
             </button>
         </div>
     </div>

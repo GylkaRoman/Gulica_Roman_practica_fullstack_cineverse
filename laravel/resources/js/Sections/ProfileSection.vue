@@ -3,8 +3,18 @@ import { router } from "@inertiajs/vue3";
 import axios from "axios";
 import { onMounted, ref } from "vue";
 
-const user = ref(null);
 const loading = ref(true);
+
+const form = ref({
+    name: "",
+    email: "",
+    old_password: "",
+    new_password: "",
+    new_password_confirmation: "",
+});
+
+const success = ref(null);
+const error = ref(null);
 
 const logout = async () => {
     try {
@@ -20,13 +30,43 @@ const logout = async () => {
             },
         );
     } catch (e) {
-        console.log("logout backend error (ignore)", e);
+        console.log("logout backend error", e);
     }
 
     localStorage.removeItem("token");
-    user.value = null;
 
     router.visit("/login");
+};
+
+const updateProfile = async () => {
+    success.value = null;
+    error.value = null;
+
+    try {
+        const token = localStorage.getItem("token");
+
+        await axios.put("/api/profile", form.value, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        success.value = "Profile updated successfully";
+
+        form.value.old_password = "";
+        form.value.new_password = "";
+        form.value.new_password_confirmation = "";
+    } catch (e) {
+        if (e.response?.data?.message) {
+            error.value = e.response.data.message;
+        } else if (e.response?.data?.errors) {
+            error.value = Object.values(e.response.data.errors)
+                .flat()
+                .join(" ");
+        } else {
+            error.value = "Update failed";
+        }
+    }
 };
 
 onMounted(async () => {
@@ -39,7 +79,8 @@ onMounted(async () => {
             },
         });
 
-        user.value = res.data;
+        form.value.name = res.data.name;
+        form.value.email = res.data.email;
     } catch (e) {
         console.error("PROFILE ERROR:", e);
     } finally {
@@ -54,35 +95,90 @@ onMounted(async () => {
     >
         <section
             class="w-full max-w-xl bg-gray-900 p-6 sm:p-8 rounded-2xl shadow-xl"
-            aria-labelledby="profile-heading"
         >
-            <h1
-                id="profile-heading"
-                class="text-2xl sm:text-3xl text-primary font-bold mb-6"
-            >
+            <h1 class="text-2xl sm:text-3xl text-primary font-bold mb-6">
                 Profile
             </h1>
 
-            <div v-if="loading" class="text-gray-400 text-sm">
-                Loading profile...
-            </div>
+            <div v-if="loading" class="text-gray-400">Loading profile...</div>
 
-            <div v-else-if="user" class="space-y-4 sm:space-y-6">
-                <p class="text-sm sm:text-lg">
-                    <span class="text-primary font-semibold">Name:</span>
-                    {{ user.name }}
-                </p>
+            <form v-else @submit.prevent="updateProfile" class="space-y-4">
+                <div v-if="success" class="bg-green-600 text-white p-3 rounded">
+                    {{ success }}
+                </div>
 
-                <p class="text-sm sm:text-lg">
-                    <span class="text-primary font-semibold">Email:</span>
-                    {{ user.email }}
-                </p>
+                <div v-if="error" class="bg-red-600 text-white p-3 rounded">
+                    {{ error }}
+                </div>
 
-                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6">
+                <div>
+                    <label class="block mb-1 text-primary"> Name </label>
+
+                    <input
+                        v-model="form.name"
+                        type="text"
+                        class="w-full p-3 rounded bg-gray-800 text-white"
+                    />
+                </div>
+
+                <div>
+                    <label class="block mb-1 text-primary"> Email </label>
+
+                    <input
+                        v-model="form.email"
+                        type="email"
+                        class="w-full p-3 rounded bg-gray-800 text-white"
+                    />
+                </div>
+
+                <div>
+                    <label class="block mb-1 text-primary">
+                        Old Password
+                    </label>
+
+                    <input
+                        v-model="form.old_password"
+                        type="password"
+                        class="w-full p-3 rounded bg-gray-800 text-white"
+                    />
+                </div>
+
+                <div>
+                    <label class="block mb-1 text-primary">
+                        New Password
+                    </label>
+
+                    <input
+                        v-model="form.new_password"
+                        type="password"
+                        class="w-full p-3 rounded bg-gray-800 text-white"
+                    />
+                </div>
+
+                <div>
+                    <label class="block mb-1 text-primary">
+                        Confirm New Password
+                    </label>
+
+                    <input
+                        v-model="form.new_password_confirmation"
+                        type="password"
+                        class="w-full p-3 rounded bg-gray-800 text-white"
+                    />
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 pt-4">
+                    <button
+                        type="submit"
+                        class="bg-primary text-black px-5 py-3 rounded-lg font-bold hover:opacity-80 transition"
+                    >
+                        Save Changes
+                    </button>
+
                     <button
                         type="button"
                         @click="router.visit('/my-bookings')"
-                        class="bg-primary text-black px-5 py-3 rounded-lg font-bold hover:opacity-80 transition focus:outline-none focus:ring-2 focus:ring-primary"
+                        class="bg-blue-600 text-white px-5 py-3 rounded-lg font-bold hover:bg-blue-500 transition"
                     >
                         My Bookings
                     </button>
@@ -90,12 +186,12 @@ onMounted(async () => {
                     <button
                         type="button"
                         @click="logout"
-                        class="bg-red-500 text-white px-5 py-3 rounded-lg font-bold hover:bg-red-400 transition focus:outline-none focus:ring-2 focus:ring-red-500"
+                        class="bg-red-500 text-white px-5 py-3 rounded-lg font-bold hover:bg-red-400 transition"
                     >
                         Logout
                     </button>
                 </div>
-            </div>
+            </form>
         </section>
     </main>
 </template>

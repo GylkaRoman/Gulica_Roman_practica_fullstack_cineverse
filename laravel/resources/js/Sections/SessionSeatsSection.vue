@@ -16,6 +16,12 @@ const ticketType = ref("standard");
 
 const prices = ref([]);
 
+const paymentError = ref(null);
+
+axios.defaults.validateStatus = (status) => {
+    return status < 500;
+};
+
 onMounted(async () => {
     const seatRes = await axios.get(`/api/sessions/${sessionId}/seats`);
     hall.value = seatRes.data.hall;
@@ -70,23 +76,52 @@ const totalPrice = computed(() => {
 const createBooking = async () => {
     if (!selectedSeats.value.length) return;
 
-    const res = await axios.post("/api/bookings", {
-        session_id: sessionId,
-        seat_ids: selectedSeats.value.map((s) => s.id),
-        format: format.value,
-        ticket_type: ticketType.value,
-    });
+    const token = localStorage.getItem("token");
+
+    const res = await axios.post(
+        "/api/bookings",
+        {
+            session_id: sessionId,
+            seat_ids: selectedSeats.value.map((s) => s.id),
+            format: format.value,
+            ticket_type: ticketType.value,
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    );
 
     bookingId.value = res.data.id;
+    paymentError.value = null;
 };
 
 const payBooking = async () => {
-    await axios.post(`/api/bookings/${bookingId.value}/pay`);
+    paymentError.value = null;
 
-    alert("Paid successfully");
+    const token = localStorage.getItem("token");
 
-    bookingId.value = null;
-    selectedSeats.value = [];
+    const res = await axios.post(
+        `/api/bookings/${bookingId.value}/pay`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    );
+
+    if (res.status === 400) {
+        paymentError.value = res.data.error;
+        return;
+    }
+
+    if (res.status === 200) {
+        bookingId.value = null;
+        selectedSeats.value = [];
+        paymentError.value = null;
+    }
 };
 
 const cancelBooking = async () => {
@@ -101,6 +136,7 @@ const cancelBooking = async () => {
 
         bookingId.value = null;
         selectedSeats.value = [];
+        paymentError.value = null;
     } catch (e) {
         console.error("DELETE ERROR:", e);
     }
@@ -112,26 +148,6 @@ const cancelBooking = async () => {
         class="flex flex-col p-10 text-primary bg-gray-950 justify-center items-center"
     >
         <h1 class="text-2xl mb-4">Hall: {{ hall?.name }}</h1>
-
-        <div class="flex gap-4 mb-6">
-            <select
-                v-model="format"
-                class="bg-primary text-gray-950 p-2 rounded cursor-pointer"
-            >
-                <option value="2D">2D</option>
-                <option value="3D">3D</option>
-            </select>
-
-            <select
-                v-model="ticketType"
-                class="bg-primary text-gray-950 p-2 rounded cursor-pointer"
-            >
-                <option value="standard">Standard</option>
-                <option value="student">Student</option>
-                <option value="child">Child</option>
-            </select>
-        </div>
-        <div class="bg-primary text-black px-12 py-1 mb-5">Movie Chene</div>
 
         <div
             class="grid gap-2"
@@ -163,7 +179,7 @@ const cancelBooking = async () => {
             <p>Total price: {{ totalPrice }} MDL</p>
 
             <button
-                class="mt-4 bg-primary text-gray-950 px-4 py-2 rounded cursor-pointer hover:bg-red-600 transition hover:text-white"
+                class="mt-4 bg-primary text-gray-950 px-4 py-2 rounded"
                 @click="createBooking"
                 :disabled="!selectedSeats.length || bookingId"
             >
@@ -176,18 +192,11 @@ const cancelBooking = async () => {
             >
                 <p class="font-bold mb-3">Booking Summary</p>
 
-                <div class="w-full mb-3">
-                    <p class="font-semibold">Seats:</p>
-
-                    <div class="flex flex-wrap gap-2 mt-1">
-                        <span
-                            v-for="s in selectedSeats"
-                            :key="s.id"
-                            class="px-2 py-1 bg-black text-white rounded"
-                        >
-                            Row {{ s.row }} - Seat {{ s.number }}
-                        </span>
-                    </div>
+                <div
+                    v-if="paymentError"
+                    class="w-full mb-3 p-2 bg-red-600 text-white rounded"
+                >
+                    {{ paymentError }}
                 </div>
 
                 <div class="w-full mb-3 space-y-1">
@@ -215,14 +224,14 @@ const cancelBooking = async () => {
                 </div>
 
                 <button
-                    class="w-full py-2 bg-green-600 text-white rounded mb-2 hover:bg-green-700 transition"
+                    class="w-full py-2 bg-green-600 text-white rounded mb-2"
                     @click="payBooking"
                 >
                     Pay Now
                 </button>
 
                 <button
-                    class="w-full py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+                    class="w-full py-2 bg-red-600 text-white rounded"
                     @click="cancelBooking"
                 >
                     Cancel Booking

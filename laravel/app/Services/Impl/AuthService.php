@@ -4,8 +4,10 @@ namespace App\Services\Impl;
 
 use App\Models\RefreshToken;
 use App\Models\User;
+use App\Repositories\Interfaces\AuthRepositoryInterface;
 use App\Services\Interfaces\AuthServiceInterface;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use PHPOpenSourceSaver\JWTAuth\JWTGuard;
@@ -14,7 +16,9 @@ class AuthService implements AuthServiceInterface
 {
     private JWTGuard $auth;
 
-    public function __construct()
+    public function __construct(
+        private AuthRepositoryInterface $repo,
+    )
     {
         $this->auth = auth('api');
     }
@@ -84,9 +88,28 @@ class AuthService implements AuthServiceInterface
         ];
     }
 
-    public function me()
+    public function me(int $userId)
     {
-        return $this->auth->user();
+        return $this->repo->findById($userId);
+    }
+
+    public function update(int $userId, array $data)
+    {
+        $user = $this->repo->findById($userId);
+
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+
+        if (!empty($data['new_password'])) {
+
+            if (!Hash::check($data['old_password'], $user->password)) {
+                throw new Exception('Old password is incorrect');
+            }
+
+            $user->password = Hash::make($data['new_password']);
+        }
+
+        return $this->repo->update($user);
     }
 
     public function logout()

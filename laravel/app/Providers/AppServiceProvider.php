@@ -30,7 +30,7 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    
+
     public function register(): void
     {
         $this->app->bind(MovieRepositoryInterface::class, MovieRepository::class);
@@ -45,7 +45,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AuthServiceInterface::class, AuthService::class);
         $this->app->bind(PriceRepositoryInterface::class, PriceRepository::class);
         $this->app->bind(PriceServiceInterface::class, PriceService::class);
-        }
+        $this->app->bind(AuthRepositoryInterface::class, AuthRepository::class);
+        $this->app->bind(AuthServiceInterface::class, AuthService::class);
+    }
 
     public function boot(): void
     {

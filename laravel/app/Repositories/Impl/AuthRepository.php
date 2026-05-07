@@ -11,4 +11,14 @@ class AuthRepository implements AuthRepositoryInterface
     {
         return User::create($data);
     }
+    public function findById(int $id)
+    {
+        return User::findOrFail($id);
+    }
+
+    public function update($user)
+    {
+        $user->save();
+        return $user;
+    }
 }
