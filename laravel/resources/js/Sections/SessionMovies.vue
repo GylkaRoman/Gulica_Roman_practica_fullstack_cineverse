@@ -10,10 +10,16 @@ import 'swiper/css/pagination'
 
 const sessions = ref([])
 
+const loaded = ref(false)
+
 onMounted(async () => {
-  const res = await fetch('/api/sessions')
-  const data = await res.json()
-  sessions.value = data.data ?? []
+  try {
+    const res = await fetch('/api/sessions')
+    const data = await res.json()
+    sessions.value = data.data ?? []
+  } finally {
+    loaded.value = true
+  }
 })
 </script>
 
@@ -24,18 +30,19 @@ onMounted(async () => {
       Now at the cinema
     </div>
 
-    <Swiper v-if="sessions.length" :modules="[Autoplay, Navigation, Pagination]" :slides-per-view="4"
-      :space-between="20" :loop="sessions.length > 1" :autoplay="{ delay: 4000 }" :navigation="true"
-      :pagination="{ clickable: true }" class="h-[490px]">
+    <Swiper v-if="loaded && sessions.length" :modules="[Autoplay, Navigation, Pagination]" :slides-per-view="4"
+      :space-between="20" :loop="sessions.length > 1" :autoplay="{ delay: 4000, disableOnInteraction: true }"
+      :navigation="true" :pagination="{ clickable: true }" class="h-[490px]">
 
       <SwiperSlide v-for="session in sessions" :key="session.id">
 
-        <Link :href="`/movie/${session.movie.id}`" class="">
+        <Link v-if="session.movie" :href="`/movie/${session.movie.id}`" class="block"
+          :aria-label="`Open movie ${session.movie.title}`">
 
-          <div
-            class="relative h-[450px] w-full overflow-hidden rounded-2xl cursor-pointer">
+          <div class="relative h-[450px] w-full overflow-hidden rounded-2xl cursor-pointer">
 
-            <img :src="session.movie.poster_url" class="absolute inset-0 object-cover" />
+            <img :src="session.movie.poster_url" :alt="session.movie.title" loading="lazy" decoding="async" width="300"
+              height="450" class="absolute inset-0 w-full h-full object-cover" />
 
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
 
@@ -43,11 +50,11 @@ onMounted(async () => {
 
               <div class="p-6">
 
-                <h1 class="text-2xl font-orbitron text-primary">
+                <h2 class="text-2xl font-orbitron text-primary">
                   {{ session.movie.title }}
-                </h1>
+                </h2>
 
-                <p class="text-sm mt-1">
+                <p class="text-sm mt-1 text-white/80">
                   {{ session.date }} / {{ session.time.slice(0, 5) }}
                 </p>
 

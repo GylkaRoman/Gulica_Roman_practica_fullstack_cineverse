@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Repositories\Impl;
-use App\DTO\MovieDTO;
 use App\Models\Movie;
 use App\Repositories\Interfaces\MovieRepositoryInterface;
 

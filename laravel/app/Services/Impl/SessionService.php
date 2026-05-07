@@ -2,7 +2,6 @@
 
 namespace App\Services\Impl;
 
-use App\DTO\SessionDTO;
 use App\Repositories\Interfaces\SessionRepositoryInterface;
 use App\Services\Interfaces\SessionServiceInterface;
 use Illuminate\Support\Facades\DB;

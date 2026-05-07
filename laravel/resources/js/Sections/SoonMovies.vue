@@ -12,29 +12,43 @@ const movies = ref([])
 const sessions = ref([])
 const soonMovies = ref([])
 
+const loading = ref(false)
+
 const fetchMovies = async () => {
     const res = await fetch('/api/movies')
     const data = await res.json()
-    return data.data
+    return data.data ?? []
 }
 
 const fetchSessions = async () => {
     const res = await fetch('/api/sessions')
     const data = await res.json()
-    return data.data
+    return data.data ?? []
 }
 
 onMounted(async () => {
-    movies.value = await fetchMovies()
-    sessions.value = await fetchSessions()
+    loading.value = true
 
-    const activeMovieIds = new Set(
-        sessions.value.map(s => s.movie_id)
-    )
+    try {
+        const [moviesData, sessionsData] = await Promise.all([
+            fetchMovies(),
+            fetchSessions()
+        ])
 
-    soonMovies.value = movies.value.filter(
-        movie => !activeMovieIds.has(movie.id)
-    )
+        movies.value = moviesData
+        sessions.value = sessionsData
+
+        const activeMovieIds = new Set(
+            sessions.value.map(s => s.movie_id)
+        )
+
+        soonMovies.value = movies.value.filter(
+            movie => !activeMovieIds.has(movie.id)
+        )
+
+    } finally {
+        loading.value = false
+    }
 })
 </script>
 
@@ -45,26 +59,28 @@ onMounted(async () => {
             Soon in cinema
         </div>
 
-        <Swiper v-if="soonMovies.length" :modules="[Autoplay, Navigation, Pagination]" :slides-per-view="3"
-            :space-between="20" :loop="soonMovies.length > 1" :autoplay="{ delay: 4000 }" :navigation="true"
-            :pagination="{ clickable: true }" class="h-[490px]">
+        <Swiper v-if="!loading && soonMovies.length" :modules="[Autoplay, Navigation, Pagination]" :slides-per-view="3"
+            :space-between="20" :loop="soonMovies.length > 1" :autoplay="{ delay: 4000, disableOnInteraction: true }"
+            :navigation="true" :pagination="{ clickable: true }" class="h-[490px]">
 
             <SwiperSlide v-for="movie in soonMovies" :key="movie.id">
 
-                <Link :href="`/movie/${movie.id}`" class="block">
+                <Link :href="`/movie/${movie.id}`" class="block" :aria-label="`Open movie ${movie.title}`">
 
-                    <div class="relative h-[450px] overflow-hidden rounded-2xl 
-                    cursor-pointer">
+                    <div class="relative h-[450px] overflow-hidden rounded-2xl cursor-pointer">
 
-                        <img :src="movie.poster_url" class="absolute inset-0 w-full h-full" />
+                        <img :src="movie.poster_url" :alt="movie.title" loading="lazy" decoding="async" width="300"
+                            height="450" class="absolute inset-0 w-full h-full object-cover" />
 
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
 
                         <div class="absolute inset-0 flex items-end">
                             <div class="p-6">
-                                <h1 class="text-2xl font-orbitron text-primary">
+
+                                <h2 class="text-2xl font-orbitron text-primary">
                                     {{ movie.title }}
-                                </h1>
+                                </h2>
+
                             </div>
                         </div>
 

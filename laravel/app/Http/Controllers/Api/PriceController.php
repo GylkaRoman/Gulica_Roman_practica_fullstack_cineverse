@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\Interfaces\PriceServiceInterface;
-use Illuminate\Http\Request;
 
 class PriceController extends Controller
 {

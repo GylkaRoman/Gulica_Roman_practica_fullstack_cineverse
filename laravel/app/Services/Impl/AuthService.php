@@ -2,8 +2,6 @@
 
 namespace App\Services\Impl;
 
-use App\DTO\Auth\LoginDTO;
-use App\DTO\Auth\RegisterDTO;
 use App\Models\RefreshToken;
 use App\Models\User;
 use App\Services\Interfaces\AuthServiceInterface;

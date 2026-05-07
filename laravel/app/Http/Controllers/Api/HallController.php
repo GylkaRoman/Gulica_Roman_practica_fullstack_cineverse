@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\DTO\HallDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreHallRequest;
 use App\Http\Requests\UpdateHallRequest;

@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\DTO\Auth\LoginDTO;
-use App\DTO\Auth\RegisterDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RefreshRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Services\Interfaces\AuthServiceInterface;
-use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {

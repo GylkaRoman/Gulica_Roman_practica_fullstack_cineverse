@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\DTO\SessionDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSessionRequest;
 use App\Http\Requests\UpdateSessionRequest;

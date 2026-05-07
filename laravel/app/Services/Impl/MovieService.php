@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Services\Impl;
-use App\DTO\MovieDTO;
 use App\Repositories\Interfaces\MovieRepositoryInterface;
 use App\Services\Interfaces\MovieServiceInterface;
 

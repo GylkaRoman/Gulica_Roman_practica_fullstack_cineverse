@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Repositories\Interfaces;
-use App\DTO\SessionDTO;
 
 interface SessionRepositoryInterface
 {

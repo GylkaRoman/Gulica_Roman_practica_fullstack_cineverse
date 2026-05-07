@@ -1,9 +1,9 @@
 <script setup>
 import MainLayout from '@/Layouts/MainLayout.vue'
-
 import HeroCarousel from '@/Sections/HeroCarousel.vue'
 import SessionMovies from '@/Sections/SessionMovies.vue';
 import SoonMovies from '@/Sections/SoonMovies.vue'
+import { Head } from '@inertiajs/vue3'
 
 </script>
 

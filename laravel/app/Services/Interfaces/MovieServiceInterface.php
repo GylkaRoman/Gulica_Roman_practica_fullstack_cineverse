@@ -2,8 +2,6 @@
 
 namespace App\Services\Interfaces;
 
-use App\DTO\MovieDTO;
-
 interface MovieServiceInterface
 {
 

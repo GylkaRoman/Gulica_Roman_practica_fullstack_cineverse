@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Repositories\Interfaces;
-use App\DTO\HallDTO;
 use App\Models\Hall;
 
 interface HallRepositoryInterface

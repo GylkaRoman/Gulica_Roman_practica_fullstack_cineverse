@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMovieRequest;
-use App\DTO\MovieDTO;
 use App\Http\Requests\UpdateMovieRequest;
 use App\Services\Interfaces\MovieServiceInterface;
 use Illuminate\Http\Request;

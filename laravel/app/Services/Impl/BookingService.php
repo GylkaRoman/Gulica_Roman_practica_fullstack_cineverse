@@ -2,8 +2,6 @@
 
 namespace App\Services\Impl;
 
-use App\DTO\BookingDTO;
-use App\Models\Booking;
 use App\Repositories\Interfaces\BookingRepositoryInterface;
 use App\Services\Interfaces\BookingServiceInterface;
 use Illuminate\Support\Facades\DB;

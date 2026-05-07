@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\DTO\BookingDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBookingRequest;
-use App\Services\Impl\BookingService;
 use App\Services\Interfaces\BookingServiceInterface;
 use Illuminate\Http\Request;
 

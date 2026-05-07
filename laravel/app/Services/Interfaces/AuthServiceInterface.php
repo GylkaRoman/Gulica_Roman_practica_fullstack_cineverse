@@ -2,9 +2,6 @@
 
 namespace App\Services\Interfaces;
 
-use App\DTO\Auth\LoginDTO;
-use App\DTO\Auth\RegisterDTO;
-
 interface AuthServiceInterface
 {
     public function register(array $data);

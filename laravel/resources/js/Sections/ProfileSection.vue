@@ -1,11 +1,11 @@
 <script setup>
-import { useAuth } from '@/Composables/useAuth'
-import { router } from '@inertiajs/vue3'
+import { router, Head } from '@inertiajs/vue3'
 import axios from 'axios'
 
 import { onMounted, ref } from 'vue'
 
 const user = ref(null)
+const loading = ref(true)
 
 const logout = async () => {
     try {
@@ -39,34 +39,68 @@ onMounted(async () => {
 
         user.value = res.data
 
-        console.log('USER:', user.value)
-
     } catch (e) {
         console.error('PROFILE ERROR:', e)
+    } finally {
+        loading.value = false
     }
 })
-
 </script>
 
 <template>
-    <div class="min-h-screen bg-black text-white p-10">
 
-        <div class="max-w-2xl mx-auto bg-gray-900 p-8 rounded-2xl">
+    <main class="min-h-screen bg-black text-white p-10">
 
-            <h1 class="text-3xl text-primary mb-6">Profile</h1>
+        <section class="max-w-2xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl" aria-labelledby="profile-heading">
 
-            <p>Name: {{ user?.name }}</p>
-            <p>Email: {{ user?.email }}</p>
+            <h1 id="profile-heading" class="text-3xl text-primary mb-6 font-bold">
+                Profile
+            </h1>
 
-            <button @click="router.visit('/my-bookings')" class="mt-6 bg-primary text-black px-4 py-2 mr-5 rounded">
-                My Bookings
-            </button>
+            <div v-if="loading" class="text-gray-400">
+                Loading profile...
+            </div>
 
-            <button @click="logout" class="mt-3 bg-red-500 px-4 py-2 rounded">
-                Logout
-            </button>
+            <div v-else-if="user">
 
-        </div>
+                <div class="space-y-3 text-lg">
 
-    </div>
+                    <p>
+                        <span class="text-primary font-semibold">
+                            Name:
+                        </span>
+
+                        {{ user.name }}
+                    </p>
+
+                    <p>
+                        <span class="text-primary font-semibold">
+                            Email:
+                        </span>
+
+                        {{ user.email }}
+                    </p>
+
+                </div>
+
+                <div class="flex flex-wrap gap-4 mt-8">
+
+                    <button type="button" @click="router.visit('/my-bookings')" aria-label="Open my bookings page"
+                        class="bg-primary text-black px-5 py-3 rounded-lg font-bold hover:bg-white transition focus:outline-none focus:ring-2 focus:ring-primary">
+                        My Bookings
+                    </button>
+
+                    <button type="button" @click="logout" aria-label="Logout from account"
+                        class="bg-red-500 px-5 py-3 rounded-lg font-bold hover:bg-red-400 transition focus:outline-none focus:ring-2 focus:ring-red-500">
+                        Logout
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
 </template>
