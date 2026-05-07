@@ -15,13 +15,13 @@ class UpdateSessionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'movie_id' => 'sometimes|exists:movies,id',
-            'hall_id' => 'sometimes|exists:halls,id',
-            'date' => 'sometimes|date',
-            'time' => 'sometimes',
-            'format' => 'sometimes|in:2D,3D',
-            'language' => 'sometimes|in:ru,en,ro',
-            'base_price' => 'sometimes|numeric|min:0',
+            'movie_id' => ['sometimes', 'integer', 'exists:movies,id'],
+            'hall_id' => ['sometimes', 'integer', 'exists:halls,id'],
+            'date' => ['sometimes', 'date', 'after_or_equal:today'],
+            'time' => ['sometimes', 'date_format:H:i'],
+            'format' => ['sometimes', 'in:2D,3D'],
+            'language' => ['sometimes', 'in:ru,en,ro'],
+            'base_price' => ['sometimes', 'numeric', 'min:0'],
         ];
     }
 }
