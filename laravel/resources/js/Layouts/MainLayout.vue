@@ -1,18 +1,16 @@
 <template>
-  <div class="min-h-screen flex flex-col">
+    <div class="min-h-screen flex flex-col">
+        <Navbar />
 
-    <Navbar />
+        <main class="flex-1 container mx-auto py-9">
+            <slot />
+        </main>
 
-    <main class=" flex-1 container mx-auto py-9">
-      <slot />
-    </main>
-
-    <Footer />
-
-  </div>
+        <Footer />
+    </div>
 </template>
 
 <script setup>
-import Navbar from '@/Components/Navbar.vue'
-import Footer from '@/Components/Footer.vue'
+import Navbar from "@/Components/Navbar.vue";
+import Footer from "@/Components/Footer.vue";
 </script>

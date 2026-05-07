@@ -1,74 +1,88 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Autoplay, Navigation, Pagination } from 'swiper/modules'
-import { Link } from '@inertiajs/vue3'
+import { ref, onMounted } from "vue";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import { Link } from "@inertiajs/vue3";
 
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
-const sessions = ref([])
-
-const loaded = ref(false)
+const sessions = ref([]);
+const loaded = ref(false);
 
 onMounted(async () => {
-  try {
-    const res = await fetch('/api/sessions')
-    const data = await res.json()
-    sessions.value = data.data ?? []
-  } finally {
-    loaded.value = true
-  }
-})
+    try {
+        const res = await fetch("/api/sessions");
+        const data = await res.json();
+        sessions.value = data.data ?? [];
+    } finally {
+        loaded.value = true;
+    }
+});
 </script>
 
 <template>
-  <div class="container px-8 mt-10">
+    <section class="container mx-auto px-3 sm:px-5 md:px-8 mt-10">
+        <div
+            class="flex flex-wrap bg-gray-950 px-4 py-4 rounded-lg mb-6 text-xl sm:text-2xl lg:text-3xl font-orbitron text-primary"
+        >
+            Now at the cinema
+        </div>
 
-    <div class="flex gap-4 flex-wrap bg-gray-950 px-5 py-5 rounded-lg text-3xl font-orbitron text-primary mb-6">
-      Now at the cinema
-    </div>
+        <Swiper
+            v-if="loaded && sessions.length"
+            :modules="[Autoplay, Navigation, Pagination]"
+            :space-between="20"
+            :loop="sessions.length > 1"
+            :autoplay="{ delay: 4000, disableOnInteraction: true }"
+            :navigation="true"
+            :pagination="{ clickable: true }"
+            :breakpoints="{
+                0: { slidesPerView: 2 },
+                450: { slidesPerView: 3 },
+            }"
+            class="pb-14"
+        >
+            <SwiperSlide v-for="session in sessions" :key="session.id">
+                <Link
+                    v-if="session.movie"
+                    :href="`/movie/${session.movie.id}`"
+                    class="block h-full"
+                >
+                    <article
+                        class="relative w-full overflow-hidden rounded-2xl cursor-pointer group h-[450px] max-[1000px]:h-[250px] max-[450px]:h-[200px]"
+                    >
+                        <img
+                            :src="session.movie.poster_url"
+                            :alt="session.movie.title"
+                            loading="lazy"
+                            class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                        />
 
-    <Swiper v-if="loaded && sessions.length" :modules="[Autoplay, Navigation, Pagination]" :slides-per-view="4"
-      :space-between="20" :loop="sessions.length > 1" :autoplay="{ delay: 4000, disableOnInteraction: true }"
-      :navigation="true" :pagination="{ clickable: true }" class="h-[490px]">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent"
+                        ></div>
 
-      <SwiperSlide v-for="session in sessions" :key="session.id">
+                        <div
+                            class="absolute inset-0 flex flex-col justify-end p-6 max-[1000px]:p-4 max-[450px]:p-3"
+                        >
+                            <h2
+                                class="font-orbitron text-primary text-2xl max-[1000px]:text-lg max-[600px]:text-sm max-[550px]:text-[10px]"
+                            >
+                                {{ session.movie.title }}
+                            </h2>
 
-        <Link v-if="session.movie" :href="`/movie/${session.movie.id}`" class="block"
-          :aria-label="`Open movie ${session.movie.title}`">
-
-          <div class="relative h-[450px] w-full overflow-hidden rounded-2xl cursor-pointer">
-
-            <img :src="session.movie.poster_url" :alt="session.movie.title" loading="lazy" decoding="async" width="300"
-              height="450" class="absolute inset-0 w-full h-full object-cover" />
-
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
-
-            <div class="absolute inset-0 flex items-end">
-
-              <div class="p-6">
-
-                <h2 class="text-2xl font-orbitron text-primary">
-                  {{ session.movie.title }}
-                </h2>
-
-                <p class="text-sm mt-1 text-white/80">
-                  {{ session.date }} / {{ session.time.slice(0, 5) }}
-                </p>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </Link>
-
-      </SwiperSlide>
-
-    </Swiper>
-
-  </div>
+                            <p
+                                class="text-white/80 mt-1 text-sm max-[550px]:text-[10px]"
+                            >
+                                {{ session.date }} /
+                                {{ session.time.slice(0, 5) }}
+                            </p>
+                        </div>
+                    </article>
+                </Link>
+            </SwiperSlide>
+        </Swiper>
+    </section>
 </template>

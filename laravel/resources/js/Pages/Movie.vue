@@ -1,6 +1,6 @@
 <script setup>
-import MainLayout from '@/Layouts/MainLayout.vue'
-import MovieSection from '@/Sections/MovieSection.vue'
+import MainLayout from "@/Layouts/MainLayout.vue";
+import MovieSection from "@/Sections/MovieSection.vue";
 </script>
 
 <template>

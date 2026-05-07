@@ -1,64 +1,88 @@
 <script setup>
-import { ref } from 'vue'
-import axios from 'axios'
-import { router } from '@inertiajs/vue3'
-const errors = ref({})
+import { ref } from "vue";
+import axios from "axios";
+import { router } from "@inertiajs/vue3";
+
+const errors = ref({});
 
 const form = ref({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: ''
-})
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+});
 
 const register = async () => {
-    errors.value = {}
+    errors.value = {};
 
     try {
-        await axios.post('/api/auth/register', form.value)
-
-        router.visit('/login')
-
+        await axios.post("/api/auth/register", form.value);
+        router.visit("/login");
     } catch (e) {
         if (e.response?.status === 422) {
-            errors.value = e.response.data.errors
+            errors.value = e.response.data.errors;
         } else {
-            console.log(e.response?.data?.message || 'Server error')
+            console.log(e.response?.data?.message || "Server error");
         }
     }
-}
+};
 </script>
 
 <template>
-    <div class="min-h-screen flex items-center justify-center text-white">
-
-        <div class="w-full max-w-md bg-gray-900 p-8 rounded-2xl">
-
-            <h1 class="text-3xl mb-6 text-primary text-center">Register</h1>
-
-            <input v-model="form.name" placeholder="Name" class="w-full p-3 mb-3 bg-gray-800 rounded"  required/>
-            <input v-model="form.email" placeholder="Email" class="w-full p-3 mb-3 bg-gray-800 rounded"  required/>
-            <input v-model="form.password" type="password" placeholder="Password" required
-                class="w-full p-3 mb-3 bg-gray-800 rounded" />
-            <input v-model="form.password_confirmation" type="password" placeholder="Confirm" required
-                class="w-full p-3 mb-5 bg-gray-800 rounded" />
-
-            <button @click="register" class="w-full bg-primary text-black py-3 rounded">
+    <div class="min-h-screen flex items-center justify-center px-4 text-white">
+        <div
+            class="w-full max-w-md bg-gray-950 p-6 sm:p-8 rounded-2xl shadow-lg"
+        >
+            <h1
+                class="text-2xl sm:text-3xl mb-6 text-primary text-center font-orbitron"
+            >
                 Register
-            </button>
+            </h1>
 
-            <p v-if="errors.name" class="text-red-500 text-sm">
+            <input
+                v-model="form.name"
+                placeholder="Name"
+                class="w-full p-3 mb-2 bg-gray-800 rounded outline-none text-sm sm:text-base"
+            />
+
+            <p v-if="errors.name" class="text-red-500 text-xs mb-2">
                 {{ errors.name[0] }}
             </p>
 
-            <p v-if="errors.email" class="text-red-500 text-sm">
+            <input
+                v-model="form.email"
+                placeholder="Email"
+                class="w-full p-3 mb-2 bg-gray-800 rounded outline-none text-sm sm:text-base"
+            />
+
+            <p v-if="errors.email" class="text-red-500 text-xs mb-2">
                 {{ errors.email[0] }}
             </p>
 
-            <p v-if="errors.password" class="text-red-500 text-sm">
+            <input
+                v-model="form.password"
+                type="password"
+                placeholder="Password"
+                class="w-full p-3 mb-2 bg-gray-800 rounded outline-none text-sm sm:text-base"
+            />
+
+            <p v-if="errors.password" class="text-red-500 text-xs mb-2">
                 {{ errors.password[0] }}
             </p>
-        </div>
 
+            <input
+                v-model="form.password_confirmation"
+                type="password"
+                placeholder="Confirm password"
+                class="w-full p-3 mb-4 bg-gray-800 rounded outline-none text-sm sm:text-base"
+            />
+
+            <button
+                @click="register"
+                class="w-full bg-primary text-black py-3 rounded-lg font-bold hover:opacity-80 transition"
+            >
+                Register
+            </button>
+        </div>
     </div>
 </template>
