@@ -54,7 +54,7 @@ php artisan jwt:secret
 
 ### 9. Run migrations and seeder with test data
 ```
-php artisan migrate --seed
+php artisan migrate:fresh --seed
 ```
 
 ### 10. Add rights

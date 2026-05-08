@@ -29,6 +29,15 @@ const clearError = (field) => {
     }
 };
 
+const inputClass = (field) => {
+    return [
+        "w-full p-3 rounded-lg outline-none",
+        errors.value[field]
+            ? "bg-gray-800 border border-red-500"
+            : "bg-gray-800 focus:ring-2 focus:ring-primary",
+    ];
+};
+
 const fetchMovies = async () => {
     const res = await axios.get("/api/movies");
     movies.value = res.data.data ?? res.data;
@@ -284,21 +293,6 @@ const resetForm = () => {
         </div>
     </div>
 </template>
-
-<script>
-export default {
-    methods: {
-        inputClass(field) {
-            return [
-                "w-full p-3 rounded-lg outline-none",
-                this.errors?.[field]
-                    ? "bg-gray-800 border border-red-500"
-                    : "bg-gray-800 focus:ring-2 focus:ring-primary",
-            ];
-        },
-    },
-};
-</script>
 
 <style>
 .error {
