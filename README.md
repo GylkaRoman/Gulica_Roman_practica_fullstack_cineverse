@@ -53,6 +53,8 @@ php artisan jwt:secret
 ```
 
 ### 9. Run migrations and seeder with test data
+While executing the following commands, may appear "APPLICATION IN PRODUCTION" and "Are you sure you want to run this command / YES / NO"  then use the arrow keys to select yes and press enter.
+
 ```
 php artisan migrate:fresh --seed
 ```
@@ -69,6 +71,12 @@ http://localhost:8000
 phpMyAdmin:
 http://localhost:8080
 
+To enter phpMyAdmin: <br>
 user: root <br>
 password: root <br>
 DB: cineverse
+
+To enter admin panel in page login: <br>
+email: admin@cineverse.com<br>
+password: admin123<br>
+And then in nav menu click button Admin<br>
