@@ -2,8 +2,6 @@
 
 namespace App\Services\Impl;
 
-use App\Models\RefreshToken;
-use App\Models\User;
 use App\Repositories\Interfaces\AuthRepositoryInterface;
 use App\Services\Interfaces\AuthServiceInterface;
 use Carbon\Carbon;
@@ -18,14 +16,13 @@ class AuthService implements AuthServiceInterface
 
     public function __construct(
         private AuthRepositoryInterface $repo,
-    )
-    {
+    ) {
         $this->auth = auth('api');
     }
 
     public function register(array $data)
     {
-        $user = User::create([
+        $user = $this->repo->createUser([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -43,13 +40,13 @@ class AuthService implements AuthServiceInterface
             ], 401);
         }
 
-        $user = auth('api')->user();
+        $user = $this->auth->user();
 
-        RefreshToken::where('user_id', $user->id)->delete();
+        $this->repo->deleteRefreshTokens($user->id);
 
         $refreshToken = hash('sha256', Str::random(64));
 
-        RefreshToken::create([
+        $this->repo->createRefreshToken([
             'user_id' => $user->id,
             'token' => $refreshToken,
             'expires_at' => Carbon::now()->addDays(7),
@@ -65,10 +62,7 @@ class AuthService implements AuthServiceInterface
 
     public function refresh(string $refreshToken)
     {
-        $refresh = RefreshToken::where('token', $refreshToken)
-            ->where('expires_at', '>', now())
-            ->first();
-
+        $refresh = $this->repo->findRefreshToken($refreshToken);
 
         if (!$refresh) {
             return response()->json([
@@ -76,7 +70,7 @@ class AuthService implements AuthServiceInterface
             ], 401);
         }
 
-        $user = User::find($refresh->user_id);;
+        $user = $this->repo->findById($refresh->user_id);
 
         $accessToken = $this->auth->login($user);
 
@@ -114,13 +108,14 @@ class AuthService implements AuthServiceInterface
 
     public function logout()
     {
-
         $user = $this->auth->user();
 
-        RefreshToken::where('user_id', $user->id)->delete();
+        $this->repo->deleteRefreshTokens($user->id);
 
         $this->auth->logout();
 
-        return response()->json(['message' => 'Logged out']);
+        return response()->json([
+            'message' => 'Logged out'
+        ]);
     }
 }

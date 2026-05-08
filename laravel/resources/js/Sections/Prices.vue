@@ -41,6 +41,7 @@ onMounted(async () => {
                     class="inline-block px-3 py-1 rounded-full"
                     :class="{
                         'bg-teal-600': price.type === 'standard',
+                        'bg-green-600': price.type === 'adult',
                         'bg-red-600': price.type === 'vip',
                         'bg-lime-700': price.type === 'student',
                         'bg-yellow-600': price.type === 'child',

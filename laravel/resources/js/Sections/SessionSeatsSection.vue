@@ -15,12 +15,11 @@ const format = ref("2D");
 const ticketType = ref("standard");
 
 const prices = ref([]);
-
 const paymentError = ref(null);
 
-axios.defaults.validateStatus = (status) => {
-    return status < 500;
-};
+const token = localStorage.getItem("token");
+
+axios.defaults.validateStatus = (status) => status < 500;
 
 onMounted(async () => {
     const seatRes = await axios.get(`/api/sessions/${sessionId}/seats`);
@@ -35,7 +34,9 @@ onBeforeUnmount(async () => {
     if (!bookingId.value) return;
 
     try {
-        await axios.delete(`/api/bookings/${bookingId.value}`);
+        await axios.delete(`/api/bookings/${bookingId.value}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
     } catch (e) {
         console.log("cleanup failed");
     }
@@ -53,30 +54,26 @@ const toggleSeat = (seat) => {
     }
 };
 
-const isSelected = (seat) => {
-    return selectedSeats.value.some((s) => s.id === seat.id);
-};
+const isSelected = (seat) => selectedSeats.value.some((s) => s.id === seat.id);
 
 const getSeatPrice = (seat) => {
-    const seatType = seat.row === 1 ? "vip" : ticketType.value;
+    const type = seat.type === "vip" ? "vip" : ticketType.value;
 
     const price = prices.value.find(
-        (p) => p.type === seatType && p.format === format.value,
+        (p) => p.type === type && p.format === format.value,
     );
 
     return price ? Number(price.price) : 0;
 };
 
-const totalPrice = computed(() => {
-    return selectedSeats.value.reduce((sum, seat) => {
+const totalPrice = computed(() =>
+    selectedSeats.value.reduce((sum, seat) => {
         return sum + getSeatPrice(seat);
-    }, 0);
-});
+    }, 0),
+);
 
 const createBooking = async () => {
     if (!selectedSeats.value.length) return;
-
-    const token = localStorage.getItem("token");
 
     const res = await axios.post(
         "/api/bookings",
@@ -100,8 +97,6 @@ const createBooking = async () => {
 const payBooking = async () => {
     paymentError.value = null;
 
-    const token = localStorage.getItem("token");
-
     const res = await axios.post(
         `/api/bookings/${bookingId.value}/pay`,
         {},
@@ -120,34 +115,40 @@ const payBooking = async () => {
     if (res.status === 200) {
         bookingId.value = null;
         selectedSeats.value = [];
-        paymentError.value = null;
     }
 };
 
 const cancelBooking = async () => {
     try {
-        const token = localStorage.getItem("token");
-
         await axios.delete(`/api/bookings/${bookingId.value}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
         });
 
         bookingId.value = null;
         selectedSeats.value = [];
         paymentError.value = null;
     } catch (e) {
-        console.error("DELETE ERROR:", e);
+        console.error(e);
     }
 };
 </script>
 
 <template>
-    <div
-        class="flex flex-col p-10 text-primary bg-gray-950 justify-center items-center"
-    >
+    <div class="flex flex-col p-10 text-primary bg-gray-950 items-center">
         <h1 class="text-2xl mb-4">Hall: {{ hall?.name }}</h1>
+
+        <div class="flex gap-4 mb-6">
+            <select v-model="format" class="bg-gray-800 p-2 rounded">
+                <option value="2D">2D</option>
+                <option value="3D">3D</option>
+            </select>
+
+            <select v-model="ticketType" class="bg-gray-800 p-2 rounded">
+                <option value="standard">Adult</option>
+                <option value="student">Student</option>
+                <option value="child">Child</option>
+            </select>
+        </div>
 
         <div
             class="grid gap-2"
@@ -165,7 +166,7 @@ const cancelBooking = async () => {
                         ? 'bg-red-600 cursor-not-allowed'
                         : isSelected(seat)
                           ? 'bg-yellow-400 text-black'
-                          : seat.row === 1
+                          : seat.type === 'vip'
                             ? 'bg-purple-500'
                             : 'bg-green-500',
                 ]"
@@ -174,69 +175,47 @@ const cancelBooking = async () => {
             </div>
         </div>
 
-        <div class="flex flex-col justify-center items-center mt-6">
+        <div class="mt-6 text-center">
             <p>Selected: {{ selectedSeats.length }}</p>
-            <p>Total price: {{ totalPrice }} MDL</p>
+            <p>Total: {{ totalPrice }} MDL</p>
 
             <button
-                class="mt-4 bg-primary text-gray-950 px-4 py-2 rounded"
+                class="mt-4 bg-primary text-black px-4 py-2 rounded"
                 @click="createBooking"
                 :disabled="!selectedSeats.length || bookingId"
             >
                 Create Booking
             </button>
+        </div>
 
-            <div
-                v-if="bookingId"
-                class="flex flex-col justify-center items-center mt-6 p-4 bg-primary rounded text-black w-full"
-            >
-                <p class="font-bold mb-3">Booking Summary</p>
+        <div
+            v-if="bookingId"
+            class="mt-6 p-4 bg-primary text-black rounded w-full max-w-md"
+        >
+            <p class="font-bold mb-2">Booking</p>
 
-                <div
-                    v-if="paymentError"
-                    class="w-full mb-3 p-2 bg-red-600 text-white rounded"
-                >
-                    {{ paymentError }}
-                </div>
-
-                <div class="w-full mb-3 space-y-1">
-                    <div class="flex justify-between">
-                        <span>Format:</span>
-                        <span>{{ format }}</span>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span>Ticket type:</span>
-                        <span>{{ ticketType }}</span>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span>Seats count:</span>
-                        <span>{{ selectedSeats.length }}</span>
-                    </div>
-                </div>
-
-                <div class="w-full border-t border-black pt-2 mb-4">
-                    <div class="flex justify-between font-bold text-lg">
-                        <span>Total:</span>
-                        <span>{{ totalPrice }} MDL</span>
-                    </div>
-                </div>
-
-                <button
-                    class="w-full py-2 bg-green-600 text-white rounded mb-2"
-                    @click="payBooking"
-                >
-                    Pay Now
-                </button>
-
-                <button
-                    class="w-full py-2 bg-red-600 text-white rounded"
-                    @click="cancelBooking"
-                >
-                    Cancel Booking
-                </button>
+            <div v-if="paymentError" class="bg-red-600 text-white p-2 mb-2">
+                {{ paymentError }}
             </div>
+
+            <p>Format: {{ format }}</p>
+            <p>Type: {{ ticketType }}</p>
+            <p>Seats: {{ selectedSeats.length }}</p>
+            <p class="font-bold">Total: {{ totalPrice }} MDL</p>
+
+            <button
+                class="w-full mt-3 bg-green-600 text-white py-2 rounded"
+                @click="payBooking"
+            >
+                Pay
+            </button>
+
+            <button
+                class="w-full mt-2 bg-red-600 text-white py-2 rounded"
+                @click="cancelBooking"
+            >
+                Cancel
+            </button>
         </div>
     </div>
 </template>

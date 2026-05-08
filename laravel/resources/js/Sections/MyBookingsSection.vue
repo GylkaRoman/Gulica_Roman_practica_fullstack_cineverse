@@ -76,13 +76,19 @@ const pay = async (id) => {
             :key="b.id"
             class="bg-gray-900 p-4 mb-4 rounded"
         >
-            <p>Movie: {{ b.movie }}</p>
-            <p>Date: {{ b.date }} | {{ b.time }}</p>
-            <p>Hall: {{ b.hall }}</p>
+            <p>Movie: {{ b.session.movie.title }}</p>
+
+            <p>Date: {{ b.session.date }} | {{ b.session.time }}</p>
+
+            <p>Hall: {{ b.session.hall.name }}</p>
 
             <p>
                 Seats:
-                {{ b.seats.map((s) => s.row + "-" + s.number).join(", ") }}
+                {{
+                    b.seats
+                        .map((s) => s.row_number + "-" + s.seat_number)
+                        .join(", ")
+                }}
             </p>
 
             <p>Total: {{ b.total_price }} MDL</p>

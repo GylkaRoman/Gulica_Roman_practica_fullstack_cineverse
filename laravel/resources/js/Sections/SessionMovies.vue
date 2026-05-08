@@ -42,13 +42,13 @@ onMounted(async () => {
                 0: { slidesPerView: 2 },
                 450: { slidesPerView: 3 },
             }"
-            class="pb-14"
+            class="pb-17"
         >
             <SwiperSlide v-for="session in sessions" :key="session.id">
                 <Link
                     v-if="session.movie"
                     :href="`/movie/${session.movie.id}`"
-                    class="block h-full"
+                    class="block h-full pb-14"
                 >
                     <article
                         class="relative w-full overflow-hidden rounded-2xl cursor-pointer group h-[450px] max-[1000px]:h-[250px] max-[450px]:h-[200px]"
@@ -57,7 +57,7 @@ onMounted(async () => {
                             :src="session.movie.poster_url"
                             :alt="session.movie.title"
                             loading="lazy"
-                            class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                            class="absolute w-full h-full transition duration-500 group-hover:scale-105"
                         />
 
                         <div

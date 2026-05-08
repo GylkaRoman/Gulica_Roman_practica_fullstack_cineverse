@@ -6,7 +6,6 @@
     <title inertia>CineVerse</title>
 
     <meta name="description" content="CineVerse - cinema schedule, movies and tickets in Chisinau">
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta property="og:title" content="CineVerse">
@@ -16,7 +15,7 @@
 
     <link rel="icon" href="/favicon.ico">
 
-    @vite('resources/js/app.js')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @inertiaHead
 </head>
 

@@ -16,13 +16,19 @@ const register = async () => {
     errors.value = {};
 
     try {
-        await axios.post("/api/auth/register", form.value);
-        router.visit("/login");
+        const res = await axios.post("/api/auth/register", form.value);
+
+        if (res.status === 200 || res.status === 201) {
+            router.visit("/login");
+        }
     } catch (e) {
         if (e.response?.status === 422) {
-            errors.value = e.response.data.errors;
+            errors.value = e.response.data.errors || {};
         } else {
-            console.log(e.response?.data?.message || "Server error");
+            console.error(
+                "Server error:",
+                e.response?.data?.message || e.message,
+            );
         }
     }
 };
@@ -41,41 +47,48 @@ const register = async () => {
 
             <input
                 v-model="form.name"
+                required
                 placeholder="Name"
-                class="w-full p-3 mb-2 bg-gray-800 rounded outline-none text-sm sm:text-base"
+                class="w-full p-3 mb-1 bg-gray-800 rounded outline-none text-sm sm:text-base"
             />
-
             <p v-if="errors.name" class="text-red-500 text-xs mb-2">
                 {{ errors.name[0] }}
             </p>
 
             <input
                 v-model="form.email"
+                required
                 placeholder="Email"
-                class="w-full p-3 mb-2 bg-gray-800 rounded outline-none text-sm sm:text-base"
+                class="w-full p-3 mb-1 bg-gray-800 rounded outline-none text-sm sm:text-base"
             />
-
             <p v-if="errors.email" class="text-red-500 text-xs mb-2">
                 {{ errors.email[0] }}
             </p>
 
             <input
                 v-model="form.password"
+                required
                 type="password"
                 placeholder="Password"
-                class="w-full p-3 mb-2 bg-gray-800 rounded outline-none text-sm sm:text-base"
+                class="w-full p-3 mb-1 bg-gray-800 rounded outline-none text-sm sm:text-base"
             />
-
             <p v-if="errors.password" class="text-red-500 text-xs mb-2">
                 {{ errors.password[0] }}
             </p>
 
             <input
                 v-model="form.password_confirmation"
+                required
                 type="password"
                 placeholder="Confirm password"
                 class="w-full p-3 mb-4 bg-gray-800 rounded outline-none text-sm sm:text-base"
             />
+            <p
+                v-if="errors.password_confirmation"
+                class="text-red-500 text-xs mb-2"
+            >
+                {{ errors.password_confirmation[0] }}
+            </p>
 
             <button
                 @click="register"

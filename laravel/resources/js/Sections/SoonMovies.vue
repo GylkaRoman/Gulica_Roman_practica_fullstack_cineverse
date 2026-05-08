@@ -74,7 +74,7 @@ onMounted(async () => {
             class="pb-14"
         >
             <SwiperSlide v-for="movie in soonMovies" :key="movie.id">
-                <Link :href="`/movie/${movie.id}`" class="block h-full">
+                <Link :href="`/movie/${movie.id}`" class="block h-full pb-14">
                     <article
                         class="relative w-full overflow-hidden rounded-2xl cursor-pointer group h-[450px] max-[1000px]:h-[250px] max-[450px]:h-[200px]"
                     >
@@ -85,7 +85,7 @@ onMounted(async () => {
                             decoding="async"
                             width="300"
                             height="450"
-                            class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                            class="absolute inset-0 w-full h-full transition duration-500 group-hover:scale-105"
                         />
 
                         <div

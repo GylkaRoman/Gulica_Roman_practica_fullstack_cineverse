@@ -123,7 +123,7 @@ onMounted(async () => {
                             :src="item.movie.poster_url"
                             :alt="`${item.movie.title} poster`"
                             loading="lazy"
-                            class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition"
+                            class="absolute w-full h-full transition"
                         />
 
                         <div

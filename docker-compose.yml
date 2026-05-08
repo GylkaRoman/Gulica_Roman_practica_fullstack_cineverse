@@ -47,7 +47,17 @@ services:
       PMA_HOST: db
     depends_on:
       - db
-
+  node:
+    image: node:20
+    container_name: cineverse_node
+    working_dir: /var/www/laravel
+    volumes:
+      - ./:/var/www
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    depends_on:
+      - app
 volumes:
   db_data:
   storage_data:

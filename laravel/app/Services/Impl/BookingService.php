@@ -36,8 +36,31 @@ class BookingService implements BookingServiceInterface
 
             $this->repository->attachSeats($booking, $data['seat_ids']);
 
+            $session = \App\Models\MovieSession::findOrFail($data['session_id']);
+
+            $seats = \App\Models\Seat::whereIn('id', $data['seat_ids'])->get();
+
+            $total = 0;
+
+            foreach ($seats as $seat) {
+
+                $type = $seat->type === 'vip'
+                    ? 'vip'
+                    : $data['ticket_type'];
+
+                $price = \App\Models\Price::where('type', $type)
+                    ->where('format', $session->format)
+                    ->first();
+
+                if (!$price) {
+                    throw new \Exception("Price not found for {$type} / {$session->format}");
+                }
+
+                $total += $price->price;
+            }
+
             $this->repository->update($booking, [
-                'total_price' => count($data['seat_ids']) * 100,
+                'total_price' => $total,
             ]);
 
             return $this->repository->findWithRelations($booking->id);

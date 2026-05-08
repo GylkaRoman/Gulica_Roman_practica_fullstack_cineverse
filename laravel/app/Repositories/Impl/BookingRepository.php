@@ -29,11 +29,11 @@ class BookingRepository implements BookingRepositoryInterface
         return Booking::with([
             'session.movie',
             'session.hall',
-            'seats',
+            'seats:id,row_number,seat_number,type'
         ])
-        ->where('user_id', $userId)
-        ->latest()
-        ->get();
+            ->where('user_id', $userId)
+            ->latest()
+            ->get();
     }
 
     public function findById(int $id)
@@ -72,7 +72,7 @@ class BookingRepository implements BookingRepositoryInterface
 
     public function getAllWithFilters(?string $status, ?string $search)
     {
-        $query = Booking::with(['user','session.movie','session.hall','seats']);
+        $query = Booking::with(['user', 'session.movie', 'session.hall', 'seats']);
 
         if ($status) {
             $query->where('status', $status);

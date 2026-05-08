@@ -18,28 +18,31 @@ const login = async () => {
     try {
         const res = await axios.post("/api/auth/login", form.value);
 
-        const token = res.data.access_token;
-        localStorage.setItem("token", token);
+        if (res.status === 200) {
+            const token = res.data.access_token;
+            localStorage.setItem("token", token);
 
-        const profile = await axios.get("/api/profile", {
-            headers: { Authorization: `Bearer ${token}` },
-        });
+            const profile = await axios.get("/api/profile", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
 
-        const user = profile.data.user ?? profile.data;
-        localStorage.setItem("user", JSON.stringify(user));
+            const user = profile.data.user ?? profile.data;
+            localStorage.setItem("user", JSON.stringify(user));
 
-        router.visit(user.role === "admin" ? "/admin" : "/profile");
+            router.visit(user.role === "admin" ? "/admin" : "/profile");
+        }
     } catch (err) {
         if (err.response?.status === 422) {
-            errors.value = err.response.data.errors;
+            errors.value = err.response.data.errors || {};
         } else if (err.response?.status === 401) {
             errors.value = { general: ["Invalid email or password"] };
         } else {
             errors.value = { general: ["Something went wrong"] };
+            console.error(err);
         }
+    } finally {
+        loading.value = false;
     }
-
-    loading.value = false;
 };
 </script>
 
@@ -64,9 +67,8 @@ const login = async () => {
             <input
                 v-model="form.email"
                 placeholder="Email"
-                class="w-full p-3 mb-2 bg-gray-800 rounded outline-none text-sm sm:text-base"
+                class="w-full p-3 mb-4 bg-gray-800 rounded outline-none text-sm sm:text-base"
             />
-
             <p v-if="errors.email" class="text-red-500 text-xs mb-2">
                 {{ errors.email[0] }}
             </p>
@@ -77,7 +79,6 @@ const login = async () => {
                 placeholder="Password"
                 class="w-full p-3 mb-4 bg-gray-800 rounded outline-none text-sm sm:text-base"
             />
-
             <p v-if="errors.password" class="text-red-500 text-xs mb-4">
                 {{ errors.password[0] }}
             </p>
